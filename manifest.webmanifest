@@ -1,0 +1,23 @@
+{
+  "name": "Theo’s Baseball App",
+  "short_name": "Baseball",
+  "start_url": "/kids-baseball-app/index.html",
+  "scope": "/kids-baseball-app/",
+  "display": "standalone",
+  "background_color": "#2E4A7D",
+  "theme_color": "#E94E41",
+  "icons": [
+    {
+      "src": "/kids-baseball-app/icons/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/kids-baseball-app/icons/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
