@@ -83,6 +83,15 @@
     })();
   </script>
 
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/kids-baseball-app/sw.js').catch(console.error);
+      });
+    }
+  </script>
+
+
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
