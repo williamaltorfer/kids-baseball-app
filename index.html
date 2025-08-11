@@ -3,8 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title></title>
+  <title>Baseball Funtimes!</title>
+  
   <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="/kids-baseball-app/manifest.webmanifest">
+  
+  <!-- iOS Home Screen icon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/kids-baseball-app/icons/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/kids-baseball-app/icons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/kids-baseball-app/icons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76"   href="/kids-baseball-app/icons/apple-touch-icon-76x76.png">
+  
+ 
+  <meta name="theme-color" content="#E94E41">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Theo’s Baseball App">
+
 </head>
 <body>
   <header>
@@ -83,15 +98,14 @@
     })();
   </script>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/kids-baseball-app/sw.js').catch(console.error);
-      });
-    }
-  </script>
-
-
   <script type="module" src="js/main.js"></script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/kids-baseball-app/sw.js').catch(console.error);
+    });
+  }
+</script>
+  
 </body>
 </html>
