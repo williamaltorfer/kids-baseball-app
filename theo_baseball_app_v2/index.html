@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title></title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="titlebar">
+        <div class="title-left">
+          <div class="app-title"></div>
+          <div class="logo" aria-label="Baseball Emoji"><img src="assets/Logo.png" alt="Theo's Baseball App Logo" class="app-logo"></div>
+        </div>
+        <nav>
+          <button class="tab" data-route="#/scores">Scores</button>
+          <button class="tab" data-route="#/standings">Standings</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">
+    <div id="view"></div>
+  </main>
+
+  <!-- Box score overlay -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="boxTitle">
+    <div class="modal">
+      <header>
+        <div class="title" id="boxTitle">Box Score</div>
+        <button class="iconbtn" id="boxHlBtn" style="display:none">▶ Highlights</button>
+        <button class="close" id="boxClose">Close ✕</button>
+      </header>
+      <div id="boxContent"></div>
+    </div>
+  </div>
+
+  <!-- Highlights overlay -->
+  <div class="overlay" id="hlOverlay" role="dialog" aria-modal="true" aria-labelledby="hlTitle">
+    <div class="modal">
+      <header>
+        <div class="title" id="hlTitle">Watch Highlights</div>
+        <button class="close" id="hlClose">Close ✕</button>
+      </header>
+      <div id="hlContent"></div>
+    </div>
+  </div>
+
+  <template id="game-card">
+    <article class="card">
+      <div class="inner">
+        <div class="game-head">
+          <div class="teams">
+            <div class="team" data-side="away">
+              <div class="crest" data-crest="away"></div>
+              <div class="team-name" data-teamname="away">Away Team</div>
+            </div>
+            <div class="at">@</div>
+            <div class="team" data-side="home">
+              <div class="crest" data-crest="home"></div>
+              <div class="team-name" data-teamname="home">Home Team</div>
+            </div>
+          </div>
+          <div class="pill" data-status>Scheduled</div>
+        </div>
+        <div class="meta" data-meta></div>
+        <div data-linescore></div>
+        <div class="actions" data-actions></div>
+      </div>
+    </article>
+  </template>
+
+  
+  <script>
+    (function(){
+      const titleEl = document.querySelector('.app-title');
+      if(!titleEl) return;
+      const h = new Date().getHours();
+      const msg = h < 12 ? 'Good morning, Theo' : (h < 17 ? 'Good afternoon, Theo' : 'Good evening, Theo');
+      titleEl.textContent = msg;
+    })();
+  </script>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
