@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Baseball Funtimes!</title>
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="/kids-baseball-app/manifest.webmanifest">
   
@@ -66,22 +69,24 @@
   <template id="game-card">
     <article class="card">
       <div class="inner">
-        <div class="game-head">
-          <div class="teams">
-            <div class="team" data-side="away">
-              <div class="crest" data-crest="away"></div>
-              <div class="team-name" data-teamname="away">Away Team</div>
-            </div>
-            <div class="at">@</div>
-            <div class="team" data-side="home">
-              <div class="crest" data-crest="home"></div>
-              <div class="team-name" data-teamname="home">Home Team</div>
-            </div>
-          </div>
-          <div class="pill" data-status>Scheduled</div>
+        <div class="card-top">
+          <span class="card-time" data-time></span>
+          <span class="pill" data-status>Scheduled</span>
         </div>
-        <div class="meta" data-meta></div>
+        <div class="card-teams">
+          <div class="card-team-row">
+            <div class="crest" data-crest="away"></div>
+            <span class="card-name" data-teamname="away">Away Team</span>
+            <span class="card-record" data-record="away"></span>
+          </div>
+          <div class="card-team-row">
+            <div class="crest" data-crest="home"></div>
+            <span class="card-name" data-teamname="home">Home Team</span>
+            <span class="card-record" data-record="home"></span>
+          </div>
+        </div>
         <div data-linescore></div>
+        <div class="card-pitchers" data-pitchers></div>
         <div class="actions" data-actions></div>
       </div>
     </article>

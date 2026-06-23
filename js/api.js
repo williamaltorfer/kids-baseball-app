@@ -1,6 +1,6 @@
 // API + data helpers
 export const MLB = {
-  schedule: (dateKey)=> `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${dateKey}`,
+  schedule: (dateKey)=> `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${dateKey}&hydrate=probablePitcher`,
   live: (gamePk)=> `https://statsapi.mlb.com/api/v1.1/game/${gamePk}/feed/live`,
   content: (gamePk)=> `https://statsapi.mlb.com/api/v1/game/${gamePk}/content`,
   standings: (season)=> `https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason&hydrate=team(division,league)`,
@@ -35,11 +35,13 @@ export async function getSchedule(dateKey){
       status: (g.status?.detailedState || 'Scheduled').toUpperCase().includes('FINAL') ? 'FINAL' : (g.status?.abstractGameState || 'Preview').toUpperCase(),
       start: g.gameDate,
       venue: g.venue?.name || '',
-      away: { id: g.teams.away.team.abbreviation, name: g.teams.away.team.name, teamId: g.teams.away.team.id },
-      home: { id: g.teams.home.team.abbreviation, name: g.teams.home.team.name, teamId: g.teams.home.team.id },
+      away: { id: g.teams.away.team.abbreviation, name: g.teams.away.team.name, teamId: g.teams.away.team.id, wins: g.teams.away.leagueRecord?.wins, losses: g.teams.away.leagueRecord?.losses },
+      home: { id: g.teams.home.team.abbreviation, name: g.teams.home.team.name, teamId: g.teams.home.team.id, wins: g.teams.home.leagueRecord?.wins, losses: g.teams.home.leagueRecord?.losses },
       probable: {
-        away: g.teams.away?.probablePitcher?.fullName ? `${g.teams.away.probablePitcher.fullName}` : 'TBD',
-        home: g.teams.home?.probablePitcher?.fullName ? `${g.teams.home.probablePitcher.fullName}` : 'TBD'
+        away: g.teams.away?.probablePitcher?.fullName || 'TBD',
+        awayId: g.teams.away?.probablePitcher?.id || null,
+        home: g.teams.home?.probablePitcher?.fullName || 'TBD',
+        homeId: g.teams.home?.probablePitcher?.id || null,
       }
     }));
     return games;

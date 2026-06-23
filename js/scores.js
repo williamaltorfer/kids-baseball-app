@@ -1,8 +1,11 @@
-import { $, $$, toDateKey, fromKey, localTime, dayLabel, btnIcon, labelStatus, escapeHtml } from './utils.js';
+import { $, $$, toDateKey, fromKey, localTime, dayLabel, btnIcon, labelStatus, escapeHtml, safe, num, avatarFor } from './utils.js';
 import { MLB, getSchedule, getLive, getContent } from './api.js';
 import { setTeamLogo, linescoreTable } from './components.js';
 import { findRecapFromContent } from './media.js';
 import { openHighlights } from './highlights.js';
+
+// In-memory cache: gamePk -> { live, content }
+const gameCache = new Map();
 
 export async function renderScores(state){
   const view = document.getElementById('view'); view.innerHTML = '';
@@ -24,13 +27,16 @@ export async function renderScores(state){
   async function load(dateKey){
     state.date = dateKey; datePick.value = dateKey; dateDisp.textContent = dayLabel(dateKey);
     grid.innerHTML = '';
+    const loading = document.createElement('div'); loading.className='empty'; loading.textContent='Loading games…'; grid.append(loading);
     const games = await getSchedule(dateKey);
+    grid.innerHTML = '';
     if(!games.length){ const empty = document.createElement('div'); empty.className='empty'; empty.textContent='No games for this date.'; grid.append(empty); return; }
     games.forEach(async g => {
       const card = makeGameCard(g); grid.append(card);
       if(g.gamePk){
         try{
           const [live, content] = await Promise.all([getLive(g.gamePk), getContent(g.gamePk)]);
+          gameCache.set(g.gamePk, { live, content });
           const ls = live.liveData?.linescore;
           if(ls){
             g.linescore = {
@@ -40,9 +46,14 @@ export async function renderScores(state){
             const mount = card.querySelector('[data-linescore]');
             mount.innerHTML = '';
             mount.append(linescoreTable(g));
+            const pitchers = card.querySelector('[data-pitchers]');
+            if(pitchers) pitchers.style.display = 'none';
           }
           const stateText = live.gameData?.status?.detailedState || live.gameData?.status?.abstractGameState;
-          card.querySelector('[data-status]').textContent = stateText;
+          const livePill = card.querySelector('[data-status]');
+          livePill.textContent = stateText;
+          const lower = String(stateText).toLowerCase();
+          livePill.dataset.type = lower.includes('final') ? 'final' : (lower.includes('progress') || lower.includes('live')) ? 'live' : 'scheduled';
 
           // If Final and recap exists, show a Watch Highlights button
           const recap = findRecapFromContent(content);
@@ -66,28 +77,69 @@ export async function renderScores(state){
 }
 
 function makeGameCard(game){
-  const tpl = document.getElementById('game-card'); const node = tpl.content.firstElementChild.cloneNode(true);
+  const tpl = document.getElementById('game-card');
+  const node = tpl.content.firstElementChild.cloneNode(true);
+
   setTeamLogo(node.querySelector('[data-crest="away"]'), game.away);
   setTeamLogo(node.querySelector('[data-crest="home"]'), game.home);
   node.querySelector('[data-teamname="away"]').textContent = game.away.name;
   node.querySelector('[data-teamname="home"]').textContent = game.home.name;
-  node.querySelector('[data-status]').textContent = labelStatus(game.status);
 
-  const meta = node.querySelector('[data-meta]');
-  const when = `${dayLabel(game.start)} • ${localTime(game.start)}`;
-  meta.textContent = `${when} • ${game.venue}`;
+  const timeEl = node.querySelector('[data-time]');
+  if(timeEl) timeEl.textContent = localTime(game.start);
+
+  const awayRec = node.querySelector('[data-record="away"]');
+  const homeRec = node.querySelector('[data-record="home"]');
+  if(awayRec && game.away.wins != null) awayRec.textContent = `${game.away.wins}–${game.away.losses}`;
+  if(homeRec && game.home.wins != null) homeRec.textContent = `${game.home.wins}–${game.home.losses}`;
+
+  const pillEl = node.querySelector('[data-status]');
+  pillEl.textContent = labelStatus(game.status);
+  pillEl.dataset.type = game.status === 'FINAL' ? 'final' : game.status === 'IN_PROGRESS' ? 'live' : 'scheduled';
 
   const lsMount = node.querySelector('[data-linescore]');
-  if(game.status === 'FINAL' && game.linescore){
-    lsMount.append(linescoreTable(game));
-  } else if (game.status === 'SCHEDULED'){
-    const p = document.createElement('div');
-    p.className = 'meta';
-    p.textContent = `Probable pitchers — Away: ${game.probable?.away || 'TBD'} | Home: ${game.probable?.home || 'TBD'}`;
-    lsMount.append(p);
+  if(game.status === 'FINAL' && game.linescore) lsMount.append(linescoreTable(game));
+
+  const pitcherSection = node.querySelector('[data-pitchers]');
+  if(pitcherSection && game.status === 'SCHEDULED'){
+    pitcherSection.append(
+      makePitcherCell(game.away.id, game.probable?.away, game.probable?.awayId),
+      makePitcherCell(game.home.id, game.probable?.home, game.probable?.homeId)
+    );
   }
 
   return node;
+}
+
+function formatPitcherName(fullName){
+  if(!fullName || fullName === 'TBD') return 'TBD';
+  const parts = fullName.trim().split(' ');
+  if(parts.length < 2) return fullName;
+  return `${parts[parts.length - 1]}, ${parts[0][0]}.`;
+}
+
+function makePitcherCell(label, name, pitcherId){
+  const cell = document.createElement('div');
+  cell.className = 'card-pitcher';
+  const city = document.createElement('div');
+  city.className = 'card-pitcher-city';
+  city.textContent = label || '';
+  const row = document.createElement('div');
+  row.className = 'card-pitcher-row';
+  if(pitcherId){
+    const img = document.createElement('img');
+    img.src = MLB.headshot(pitcherId);
+    img.className = 'avatar sm';
+    img.alt = '';
+    img.onerror = function(){ this.style.display = 'none'; };
+    row.append(img);
+  }
+  const nameEl = document.createElement('span');
+  nameEl.className = 'card-pitcher-name';
+  nameEl.textContent = formatPitcherName(name);
+  row.append(nameEl);
+  cell.append(city, row);
+  return cell;
 }
 
 export async function openBoxLive(game){
@@ -99,7 +151,10 @@ export async function openBoxLive(game){
   hlBtn.onclick = null;
 
   try{
-    const [live, cdata] = await Promise.all([getLive(game.gamePk), getContent(game.gamePk)]);
+    const cached = gameCache.get(game.gamePk);
+    const [live, cdata] = cached
+      ? [cached.live, cached.content]
+      : await Promise.all([getLive(game.gamePk), getContent(game.gamePk)]);
     // Show Highlights button in header only for Final games with recap
     const stateText = live.gameData?.status?.detailedState || live.gameData?.status?.abstractGameState;
     const recap = findRecapFromContent(cdata);
@@ -138,9 +193,6 @@ export async function openBoxLive(game){
 }
 
 // Box helpers and tables
-import { safe, num } from './utils.js';
-import { linescoreTable as _ignore } from './components.js'; // ensure module loads before use
-
 function linescoreSubcard(game){
   const card = document.createElement('div'); card.className='subcard';
   card.innerHTML = `<div class='head'>Linescore</div>`;
@@ -169,7 +221,7 @@ function battingSubcard(title, rows){
         <tr>
           <td>
             <div class='player'>
-              <img src='${r.headshot}' alt='' class='avatar' />
+              <img src='${r.headshot}' onerror="this.onerror=null;this.src='${avatarFor(r.name)}'" alt='' class='avatar' />
               <span class='name'>${escapeHtml(r.name)}</span>
             </div>
           </td>
@@ -209,7 +261,7 @@ function pitchingSubcard(title, rows){
         <tr>
           <td>
             <div class='player'>
-              <img src='${r.headshot}' alt='' class='avatar' />
+              <img src='${r.headshot}' onerror="this.onerror=null;this.src='${avatarFor(r.name)}'" alt='' class='avatar' />
               <span class='name'>${escapeHtml(r.name)}</span>
             </div>
           </td>

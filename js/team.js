@@ -1,4 +1,4 @@
-import { btnIcon, escapeHtml, safe, formatAVG } from './utils.js';
+import { btnIcon, escapeHtml, safe, formatAVG, avatarFor } from './utils.js';
 import { MLB, getTeam, getRosterActive, getPeopleStats, fetchJSON } from './api.js';
 import { setTeamLogo } from './components.js';
 
@@ -157,13 +157,13 @@ function rosterTableHitters(label, rows, orderMap={}, lineupDate=''){
       <col style="width:6.666%" /><col style="width:6.666%" /><col style="width:6.666%" /><col style="width:6.666%" /><col style="width:6.666%" /><col style="width:6.666%" />
     </colgroup>
     <thead>
-      <tr><th colspan='8' style='text-align:left;background:#fff;'>${escapeHtml(label)}${lineupDate ? ` <span class='subhead'>(from ${escapeHtml(lineupDate)})</span>` : ''}</th></tr>
+      <tr><th colspan='8' style='text-align:left;'>${escapeHtml(label)}${lineupDate ? ` <span class='subhead'>(from ${escapeHtml(lineupDate)})</span>` : ''}</th></tr>
       <tr><th>Player</th><th>Pos</th><th class='num'>G</th><th class='num'>AB</th><th class='num'>R</th><th class='num'>H</th><th class='num'>HR</th><th class='num'>AVG</th></tr>
     </thead>
     <tbody>
       ${rows.map(r=>`
         <tr>
-          <td><div class='player'><img src='${MLB.headshot(r.id)}' class='avatar' alt='' /><span class='name'>${escapeHtml(r.name)}</span></div></td>
+          <td><div class='player'><img src='${MLB.headshot(r.id)}' onerror="this.onerror=null;this.src='${avatarFor(r.name)}'" class='avatar' alt='' /><span class='name'>${escapeHtml(r.name)}</span></div></td>
           <td>${escapeHtml(r.pos||'')}</td>
           <td class='num'>${safe(r.stat.games ?? r.stat.gamesPlayed)}</td>
           <td class='num'>${safe(r.stat.atBats)}</td>
@@ -185,13 +185,13 @@ function rosterTablePitchers(label, rows){
       <col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" />
     </colgroup>
     <thead>
-      <tr><th colspan='10' style='text-align:left;background:#fff;'>${escapeHtml(label)}</th></tr>
+      <tr><th colspan='10' style='text-align:left;'>${escapeHtml(label)}</th></tr>
       <tr><th>Player</th><th class='num'>G</th><th class='num'>GS</th><th class='num'>IP</th><th class='num'>H</th><th class='num'>ER</th><th class='num'>BB</th><th class='num'>SO</th><th class='num'>SV</th><th class='num'>ERA</th></tr>
     </thead>
     <tbody>
       ${rows.map(r=>`
         <tr>
-          <td><div class='player'><img src='${MLB.headshot(r.id)}' class='avatar' alt='' /><span class='name'>${escapeHtml(r.name)}</span></div></td>
+          <td><div class='player'><img src='${MLB.headshot(r.id)}' onerror="this.onerror=null;this.src='${avatarFor(r.name)}'" class='avatar' alt='' /><span class='name'>${escapeHtml(r.name)}</span></div></td>
           <td class='num'>${safe(r.stat.games ?? r.stat.gamesPlayed)}</td>
           <td class='num'>${safe(r.stat.gamesStarted)}</td>
           <td class='num'>${safe(r.stat.inningsPitched)}</td>
