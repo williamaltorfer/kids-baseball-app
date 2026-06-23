@@ -663,6 +663,172 @@ nav { display: flex; gap: 8px; }
 .logo.auto-wave .app-logo { animation: bat-wave .6s ease-in-out; }
 
 /* ==================================================
+   STATS PAGE
+   ================================================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* Leaderboard card */
+.stat-card {
+  background: var(--white);
+  color: var(--ink);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh);
+  overflow: hidden;
+}
+
+.stat-card--loading .stat-card-head {
+  height: 52px;
+  background: var(--surface);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.stat-card--loading .stat-skeleton-rows {
+  height: 380px;
+  background: linear-gradient(var(--surface) 1px, var(--white) 1px);
+  background-size: 100% 38px;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .5; }
+}
+
+/* Card header */
+.stat-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+}
+.stat-card-head-left {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.stat-card-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.stat-card-abbr {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* Info button */
+.stat-info-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  flex-shrink: 0;
+}
+.stat-info-btn:hover,
+.stat-info-btn--active { background: var(--border); color: var(--navy); }
+
+/* Info drawer */
+.stat-info-drawer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease, padding .3s ease;
+  background: #EEF2FF;
+  border-bottom: 1px solid var(--border);
+}
+.stat-info-drawer--open {
+  max-height: 160px;
+  padding: 10px 14px;
+}
+.stat-info-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* Leaderboard list */
+.stat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .12s;
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-row:hover      { background: var(--surface); }
+.stat-row:active     { background: var(--border); }
+
+.stat-rank {
+  width: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-3);
+  text-align: center;
+  flex-shrink: 0;
+}
+.stat-row:nth-child(1) .stat-rank { color: #C8912A; }
+.stat-row:nth-child(2) .stat-rank { color: var(--ink-2); }
+.stat-row:nth-child(3) .stat-rank { color: #A0674A; }
+
+.stat-player-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.stat-player-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stat-player-team {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.stat-value {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.stat-empty {
+  padding: 24px 14px;
+  font-size: 13px;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+/* ==================================================
    RESPONSIVE
    ================================================== */
 @media (max-width: 900px) {
@@ -673,4 +839,5 @@ nav { display: flex; gap: 8px; }
   .logo .app-logo  { height: 92px; }
   .app-title       { font-size: 18px; }
   .grid            { grid-template-columns: 1fr; }
+  .stats-grid      { grid-template-columns: 1fr; }
 }
