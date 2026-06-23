@@ -1,136 +1,219 @@
-/* ==================================================
-   DESIGN TOKENS
-   ================================================== */
-:root {
-  --red:       #E94E41;
-  --navy:      #1D3665;
-  --sky:       #48C3CC;
-  --yellow:    #F6D58E;
-  --ink:       #0E1726;
-  --ink-2:     #4B5B7C;
-  --ink-3:     #8A9BBF;
-  --white:     #FFFFFF;
-  --surface:   #F3F6FF;
-  --border:    #E2EAFF;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
 
-  /* Status colours */
-  --final-fg:  #1A7A4A;
-  --final-bg:  #E6F7EE;
-  --live-fg:   #C0392B;
-  --live-bg:   #FDECEA;
-  --sched-fg:  #2E4A7D;
-  --sched-bg:  #EEF2FF;
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* Brand palette */
+  --pine-teal:  #065143;
+  --dark-cyan:  #129490;
+  --emerald:    #70B77E;
+  --bronze:     #E0A890;
+  --violet-red: #CE1483;
+
+  /* Light surface layers */
+  --bg:        #F2F8F6;
+  --surface-1: #FFFFFF;
+  --surface-2: #EEF6F3;
+  --surface-3: #E0EDEA;
+
+  /* Borders */
+  --border:   #C4DAD5;
+  --border-2: #D6E8E4;
+
+  /* Interactive */
+  --accent:     var(--dark-cyan);
+  --accent-dim: rgba(18, 148, 144, .10);
+
+  /* Gold-warm (fun facts) */
+  --gold:     #B56A2A;
+  --gold-dim: rgba(224, 168, 144, .25);
+
+  /* Text (on light backgrounds) */
+  --text-1: #082E25;
+  --text-2: #3A6B62;
+  --text-3: #7FA89F;
+
+  /* Sidebar text (on pine-teal dark bg) */
+  --side-text-1: #FFFFFF;
+  --side-text-2: rgba(255,255,255,.65);
+  --side-text-3: rgba(255,255,255,.38);
+
+  /* Status */
+  --live-c:   var(--violet-red);
+  --live-bg:  rgba(206, 20, 131, .10);
+  --final-c:  #2A8A5C;
+  --final-bg: rgba(112, 183, 126, .15);
+  --sched-c:  var(--dark-cyan);
+  --sched-bg: rgba(18, 148, 144, .10);
 
   /* Shape */
   --r-sm: 8px;
-  --r:    14px;
-  --r-lg: 20px;
-  --r-xl: 26px;
+  --r:    12px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+
+  /* Sidebar */
+  --sidebar-w: 210px;
 
   /* Shadows */
-  --sh-sm: 0 2px 8px  rgba(14,23,38,.08);
-  --sh:    0 4px 18px rgba(14,23,38,.14);
-  --sh-lg: 0 8px 32px rgba(14,23,38,.22);
+  --sh-sm: 0 2px 8px rgba(6,81,67,.08);
+  --sh:    0 4px 20px rgba(6,81,67,.12);
+  --sh-lg: 0 8px 40px rgba(6,81,67,.18);
 }
 
-/* ==================================================
+/* ============================================================
    RESET & BASE
-   ================================================== */
-*, *::before, *::after { box-sizing: border-box; }
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 * { -webkit-tap-highlight-color: transparent; }
 
 html, body {
   height: 100%;
-  margin: 0;
-  font-family: 'Fredoka', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 16px;
-  background: var(--navy);
-  color: var(--white);
+  background: var(--bg);
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ==================================================
-   LAYOUT
-   ================================================== */
-.wrap          { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
-main.wrap      { padding: 20px 16px; }
-
-/* ==================================================
-   HEADER
-   ================================================== */
-header {
-  position: relative;
-  overflow: visible;
-  z-index: 10;
-  background: var(--red);
-  padding: 12px 16px;
-  box-shadow: var(--sh-lg);
-  background-image:
-    radial-gradient(circle at 20px 20px, rgba(255,255,255,.08) 2px, transparent 0),
-    radial-gradient(circle at 60px 60px, rgba(255,255,255,.08) 2px, transparent 0);
-  background-size: 80px 80px;
+/* ============================================================
+   APP SHELL — sidebar + main
+   ============================================================ */
+.app-shell {
+  display: flex;
+  height: 100dvh;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.titlebar   { display: flex; align-items: center; justify-content: space-between; }
-.title-left { display: flex; align-items: center; gap: 12px; flex: 1; }
-
-/* Mascot — pinned to absolute centre of the header */
-.logo {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%) rotate(-2deg);
-  z-index: 3;
-  pointer-events: none;
-}
-.logo .app-logo {
-  height: 128px;
-  width: auto;
-  pointer-events: none;
-  transform-origin: 60% 40%;
-  background-color: var(--red);
-  margin: 0 50px 50px;
-  border-radius: 100%;
+/* ============================================================
+   SIDEBAR  (pine-teal dark panel)
+   ============================================================ */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--pine-teal);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.app-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--white);
-  text-align: left;
-  line-height: 1.1;
+/* Brand / logo area */
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px 18px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+.app-mark { flex-shrink: 0; filter: drop-shadow(0 2px 5px rgba(0,0,0,.25)); }
+.sidebar-brand-text { min-width: 0; }
+.app-wordmark {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--side-text-1);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.app-greeting {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--side-text-2);
+  margin-top: 2px;
+  white-space: nowrap;
 }
 
-/* ==================================================
-   NAVIGATION TABS
-   ================================================== */
-nav { display: flex; gap: 8px; }
+/* Nav items */
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
-.tab {
-  padding: 10px 20px;
-  min-height: 44px;
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  width: 100%;
   border: none;
-  border-radius: var(--r-xl);
+  border-radius: var(--r);
+  background: transparent;
+  color: var(--side-text-2);
   font-family: inherit;
-  font-size: 17px;
-  font-weight: 700;
-  background: rgba(255,255,255,.18);
-  color: var(--white);
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: var(--sh-sm);
-  transition: background .15s, color .15s, transform .1s;
+  text-align: left;
+  transition: background .15s, color .15s;
+  min-height: 48px;
 }
-.tab:active                { transform: scale(.94); }
-.tab[aria-current="page"] { background: var(--white); color: var(--red); }
+.nav-item:hover {
+  background: rgba(255,255,255,.10);
+  color: var(--side-text-1);
+}
+.nav-item[aria-current="page"] {
+  background: var(--dark-cyan);
+  color: #fff;
+}
+.nav-item[aria-current="page"] .nav-icon { stroke: #fff; }
+.nav-icon { flex-shrink: 0; stroke: currentColor; }
 
-/* ==================================================
+/* Sidebar footer */
+.sidebar-footer {
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255,255,255,.10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sidebar-date {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--side-text-3);
+  line-height: 1.4;
+}
+.w-flag {
+  width: 28px;
+  height: 28px;
+  background: var(--emerald);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: -.5px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 24px;
+  background: var(--bg);
+  min-width: 0;
+}
+
+/* ============================================================
    DATE CONTROLS
-   ================================================== */
+   ============================================================ */
 .controls {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .iconbtn {
@@ -138,82 +221,89 @@ nav { display: flex; gap: 8px; }
   align-items: center;
   justify-content: center;
   height: 44px;
-  padding: 0 16px;
-  border: none;
-  border-radius: var(--r-lg);
+  padding: 0 18px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
   font-family: inherit;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  background: var(--yellow);
-  color: var(--ink);
+  background: var(--surface-1);
+  color: var(--text-1);
   cursor: pointer;
-  box-shadow: var(--sh-sm);
-  transition: transform .1s, box-shadow .1s;
+  transition: background .15s, border-color .15s, transform .1s;
   white-space: nowrap;
+  box-shadow: var(--sh-sm);
 }
-.iconbtn.square { width: 44px; padding: 0; font-size: 20px; }
-.iconbtn:active { transform: scale(.90); box-shadow: none; }
+.iconbtn.square { width: 44px; padding: 0; font-size: 18px; }
+.iconbtn:hover  { background: var(--surface-2); border-color: var(--accent); }
+.iconbtn:active { transform: scale(.92); }
 
 .date-display {
-  background: var(--white);
-  color: var(--ink);
+  background: var(--surface-1);
+  color: var(--text-1);
+  border: 1.5px solid var(--border);
   border-radius: var(--r);
-  padding: 10px 14px;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: .2px;
-  box-shadow: var(--sh-sm);
-}
-.date-input {
-  background: var(--white);
-  color: var(--ink);
-  border: none;
-  border-radius: var(--r);
-  padding: 10px 12px;
-  font-family: inherit;
+  padding: 10px 16px;
   font-size: 15px;
   font-weight: 700;
   box-shadow: var(--sh-sm);
 }
-
-/* ==================================================
-   GAME CARD GRID
-   ================================================== */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 16px;
-}
-
-/* Loading / empty state */
-.empty {
-  grid-column: 1 / -1;
-  color: rgba(255,255,255,.75);
-  padding: 36px 24px;
-  text-align: center;
-  border: 2px dashed rgba(255,255,255,.25);
-  border-radius: var(--r-lg);
-  background: rgba(255,255,255,.07);
-  font-size: 18px;
+.date-input {
+  background: var(--surface-1);
+  color: var(--text-1);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 14px;
   font-weight: 600;
 }
 
-/* ==================================================
-   GAME CARD
-   ================================================== */
-.card {
-  background: var(--white);
-  color: var(--ink);
+/* ============================================================
+   GAME CARD GRID
+   ============================================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  color: var(--text-2);
+  padding: 48px 24px;
+  text-align: center;
+  border: 1.5px dashed var(--border);
   border-radius: var(--r-lg);
-  box-shadow: var(--sh);
+  background: var(--surface-1);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* ============================================================
+   GAME CARD
+   ============================================================ */
+.card {
+  background: var(--surface-1);
+  color: var(--text-1);
+  border-radius: var(--r-lg);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--sh-sm);
   overflow: hidden;
   cursor: pointer;
-  transition: transform .15s, box-shadow .15s;
+  transition: transform .15s, box-shadow .15s, border-color .15s;
+  position: relative;
 }
-.card:active { transform: scale(.98); box-shadow: var(--sh-sm); }
-.card .inner { padding: 14px 16px 12px; }
+.card:hover  { transform: translateY(-2px); box-shadow: var(--sh); border-color: var(--dark-cyan); }
+.card:active { transform: scale(.98); box-shadow: none; }
+.card .inner { padding: 14px 15px 12px; }
 
-/* Time + status pill row */
+/* Live: left accent bar */
+.card:has(.pill[data-type="live"]) {
+  border-left: 3px solid var(--violet-red);
+}
+
+/* Time + status pill */
 .card-top {
   display: flex;
   align-items: center;
@@ -221,16 +311,17 @@ nav { display: flex; gap: 8px; }
   margin-bottom: 10px;
 }
 .card-time {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: .2px;
 }
 
-/* Stacked team rows */
+/* Team rows */
 .card-teams {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
   margin-bottom: 10px;
 }
 .card-team-row {
@@ -240,35 +331,37 @@ nav { display: flex; gap: 8px; }
   min-width: 0;
 }
 .card-team-row .crest {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: var(--r-sm);
   padding: 3px;
   flex-shrink: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
 }
 .card-name {
   font-size: 15px;
   font-weight: 700;
-  color: var(--ink);
+  color: var(--text-1);
   flex: 1;
   min-width: 0;
 }
 .card-record {
   font-size: 12px;
   font-weight: 500;
-  color: var(--ink-2);
+  color: var(--text-2);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-/* Probable pitchers section */
+/* Probable pitchers */
 .card-pitchers {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-2);
 }
 .card-pitcher { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .card-pitcher-city {
@@ -276,104 +369,102 @@ nav { display: flex; gap: 8px; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .6px;
-  color: var(--ink-3);
+  color: var(--text-3);
 }
 .card-pitcher-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
 .card-pitcher-name {
   font-size: 13px;
   font-weight: 700;
-  color: var(--ink);
+  color: var(--text-1);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .avatar.sm { width: 24px; height: 24px; }
 
-/* ==================================================
-   TEAM CRESTS / LOGOS  (padding = no edge-clipping)
-   ================================================== */
+.actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ============================================================
+   TEAM CRESTS / LOGOS
+   ============================================================ */
 .crest {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--r);
-  background: var(--surface);
+  background: var(--surface-2);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px;           /* breathing room so logos aren't clipped */
+  padding: 4px;
   flex-shrink: 0;
   overflow: hidden;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  color: var(--ink-2);
+  color: var(--text-2);
+  border: 1px solid var(--border);
 }
 .crest img { width: 100%; height: 100%; object-fit: contain; }
 
-/* ==================================================
-   STATUS PILL — colour-coded by data-type
-   ================================================== */
+/* ============================================================
+   STATUS PILL
+   ============================================================ */
 .pill {
   display: inline-flex;
   align-items: center;
-  padding: 5px 11px;
+  gap: 5px;
+  padding: 4px 10px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   white-space: nowrap;
   flex-shrink: 0;
+  letter-spacing: .3px;
   background: var(--sched-bg);
-  color: var(--sched-fg);
+  color: var(--sched-c);
 }
-.pill[data-type="final"] {
-  background: var(--final-bg);
-  color: var(--final-fg);
-}
-.pill[data-type="live"] {
-  background: var(--live-bg);
-  color: var(--live-fg);
-  animation: live-pulse 1.4s ease-in-out infinite;
+.pill[data-type="final"] { background: var(--final-bg); color: var(--final-c); }
+.pill[data-type="live"]  { background: var(--live-bg);  color: var(--live-c); }
+.pill[data-type="live"]::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--live-c);
+  animation: live-pulse 1.3s ease-in-out infinite;
 }
 @keyframes live-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: .55; }
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%       { opacity: .35; transform: scale(.65); }
 }
 
-/* ==================================================
-   CARD META & PROBABLE PITCHERS
-   ================================================== */
-.meta    { color: var(--ink-2); font-size: 13px; margin-top: 4px; }
-.actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
-
-/* ==================================================
+/* ============================================================
    LINESCORE TABLE
-   ================================================== */
-
-/* Scroll wrapper so wide tables don't break card layout */
+   ============================================================ */
 [data-linescore] { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
 .linescore {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  font-size: 13px;
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
 .linescore thead th {
-  background: var(--surface);
-  color: var(--ink-2);
-  font-size: 11px;
+  background: var(--surface-2);
+  color: var(--text-3);
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .4px;
-  padding: 5px 5px;
+  padding: 4px 5px;
   text-align: center;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 .linescore tbody td {
   padding: 6px 5px;
   text-align: center;
-  border-bottom: 1px solid var(--border);
-  color: var(--ink);
+  border-bottom: 1px solid var(--border-2);
+  color: var(--text-1);
 }
 .linescore .teamcol {
   text-align: left;
@@ -384,35 +475,37 @@ nav { display: flex; gap: 8px; }
   text-overflow: ellipsis;
   padding-left: 4px;
 }
-/* Highlight the R column */
 .linescore thead th:last-child,
 .linescore tbody td:last-child {
   font-weight: 800;
-  font-size: 14px;
-  color: var(--ink);
-  background: var(--surface);
+  font-size: 13px;
+  color: var(--text-1);
+  background: var(--surface-2);
 }
 
-/* ==================================================
+/* ============================================================
    OVERLAYS & MODALS
-   ================================================== */
+   ============================================================ */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(14,23,38,.6);
+  background: rgba(6,81,67,.35);
   display: none;
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  padding: 16px;
+  padding: 20px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .modal {
-  width: min(100%, 860px);
-  max-height: 90vh;
-  background: var(--white);
-  color: var(--ink);
+  width: min(100%, 880px);
+  max-height: 92vh;
+  background: var(--surface-1);
+  color: var(--text-1);
   border-radius: var(--r-xl);
+  border: 1.5px solid var(--border);
   box-shadow: var(--sh-lg);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -422,9 +515,9 @@ nav { display: flex; gap: 8px; }
 .modal header {
   position: sticky;
   top: 0;
-  background: var(--white);
+  background: var(--surface-1);
   padding: 16px 18px;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -435,210 +528,228 @@ nav { display: flex; gap: 8px; }
 .modal .title {
   font-size: 16px;
   font-weight: 800;
-  color: var(--ink);
+  color: var(--text-1);
 }
 
 .close {
-  border: none;
-  background: var(--surface);
-  color: var(--ink-2);
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-2);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   border-radius: var(--r-sm);
-  padding: 9px 14px;
+  padding: 8px 14px;
   min-height: 40px;
   cursor: pointer;
-  transition: background .15s;
+  transition: background .15s, color .15s, border-color .15s;
 }
+.close:hover  { background: var(--surface-3); color: var(--text-1); border-color: var(--accent); }
 .close:active { background: var(--border); }
 
-/* ==================================================
+/* ============================================================
    BOX SCORE SUBCARDS
-   ================================================== */
+   ============================================================ */
 .subcard {
-  background: var(--white);
-  border: 2px solid var(--border);
+  background: var(--surface-1);
+  border: 1.5px solid var(--border);
   border-radius: var(--r-lg);
   overflow: hidden;
   margin: 12px;
 }
 .subcard .head {
   padding: 10px 14px;
-  background: var(--surface);
-  color: var(--ink);
-  font-size: 14px;
+  background: var(--pine-teal);
+  color: #fff;
+  font-size: 13px;
   font-weight: 800;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid rgba(0,0,0,.1);
 }
-.subhead { font-size: 12px; font-weight: 500; color: var(--ink-3); }
+.subhead { font-size: 12px; font-weight: 500; color: var(--text-2); }
 
-/* ==================================================
+/* ============================================================
    STATS TABLES (box score + team page)
-   ================================================== */
+   ============================================================ */
 .table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
 }
 .table th {
-  background: var(--surface);
-  color: var(--ink-2);
-  font-size: 11px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .5px;
   padding: 8px 10px;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
   text-align: left;
-  color: var(--ink);
 }
 .table td {
   padding: 9px 10px;
-  border-bottom: 1px solid var(--border);
-  color: var(--ink);
+  border-bottom: 1px solid var(--border-2);
+  color: var(--text-1);
   text-align: left;
 }
-/* Zebra stripes */
-.table tbody tr:nth-child(even) td { background: #F5F8FF; }
+.table tbody tr:nth-child(even) td { background: var(--surface-2); }
+.table tbody tr:hover td { background: var(--surface-3); }
+.box-player-row:hover td { background: var(--surface-3); cursor: pointer; }
 
 .num { text-align: right !important; font-variant-numeric: tabular-nums; }
 
-/* Fixed layout for dense box score */
 .table.box { table-layout: fixed; }
 .table.box colgroup col:nth-child(1)   { width: 34%; }
-.table.box colgroup col:nth-child(2)   { width: 8%;  }
+.table.box colgroup col:nth-child(2)   { width: 8%; }
 .table.box colgroup col:nth-child(n+3) { width: calc(58% / 8); }
 
-/* ==================================================
+/* ============================================================
    PLAYER ROW (avatar + name)
-   ================================================== */
+   ============================================================ */
 .player { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .avatar {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: var(--surface);
+  background: var(--surface-3);
   border: 1.5px solid var(--border);
   object-fit: cover;
   flex-shrink: 0;
 }
 .player .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 
-/* ==================================================
+/* ============================================================
    HIGHLIGHTS VIDEO
-   ================================================== */
+   ============================================================ */
 .video-wrap { padding: 14px; }
 .video {
   width: 100%;
-  max-height: 66vh;
+  max-height: 60vh;
   border-radius: var(--r-lg);
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
   box-shadow: var(--sh);
   background: #000;
   display: block;
 }
 
-/* ==================================================
+/* ============================================================
    STANDINGS PAGE
-   ================================================== */
+   ============================================================ */
 .seg {
   display: inline-flex;
-  background: rgba(255,255,255,.15);
+  background: var(--surface-1);
+  border: 1.5px solid var(--border);
   border-radius: var(--r-xl);
   padding: 4px;
+  margin-bottom: 16px;
   box-shadow: var(--sh-sm);
 }
 .seg button {
   border: none;
-  padding: 8px 16px;
-  min-height: 44px;
+  padding: 8px 18px;
+  min-height: 40px;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  color: rgba(255,255,255,.8);
+  color: var(--text-2);
   background: transparent;
   border-radius: var(--r-xl);
   transition: background .15s, color .15s;
 }
-.seg button[aria-pressed="true"] { background: var(--yellow); color: var(--ink); }
+.seg button[aria-pressed="true"] {
+  background: var(--pine-teal);
+  color: #fff;
+}
 
-.standings { display: grid; gap: 16px; }
+.standings { display: grid; gap: 14px; }
 
 .stand-card {
-  background: var(--white);
-  border: 2px solid var(--border);
+  background: var(--surface-1);
+  border: 1.5px solid var(--border);
   border-radius: var(--r-lg);
   overflow: hidden;
-  color: var(--ink);
+  color: var(--text-1);
+  box-shadow: var(--sh-sm);
 }
 .stand-card .head {
-  padding: 12px 14px;
-  background: var(--surface);
-  color: var(--ink);
-  font-size: 15px;
+  padding: 11px 14px;
+  background: var(--pine-teal);
+  color: #fff;
+  font-size: 14px;
   font-weight: 800;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid rgba(0,0,0,.08);
 }
 
 .stand-table { width: 100%; border-collapse: collapse; }
 .stand-table th {
-  background: var(--surface);
-  color: var(--ink-2);
-  font-size: 11px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .5px;
   padding: 8px 10px;
   text-align: right;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 .stand-table th:first-child { text-align: left; }
 .stand-table td {
   padding: 11px 10px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-2);
   text-align: right;
   font-variant-numeric: tabular-nums;
-  color: var(--ink);
+  color: var(--text-1);
   font-size: 14px;
 }
-.stand-table tbody tr:nth-child(even) td { background: #F5F8FF; }
-.stand-table tbody tr:active td { background: var(--surface); }
+.stand-table tbody tr:nth-child(even) td { background: var(--surface-2); }
+.stand-table tbody tr:hover td { background: var(--surface-3); cursor: pointer; }
 
 .stand-team {
   text-align: left !important;
   display: flex;
   align-items: center;
   gap: 10px;
-  cursor: pointer;
   font-weight: 700;
 }
-/* Smaller crests in standings rows */
+.stand-rank {
+  width: 22px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-align: right;
+  flex-shrink: 0;
+}
 .stand-team .crest {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: var(--r-sm);
-  padding: 3px;
+  padding: 2px;
+  border: none;
+  background: transparent;
 }
 
-/* ==================================================
+/* ============================================================
    TEAM PAGE
-   ================================================== */
+   ============================================================ */
 .team-header {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin: 16px 0 12px;
+  margin: 4px 0 20px;
 }
 .team-header .crest {
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   border-radius: var(--r-lg);
-  background: var(--white);
+  background: var(--surface-2);
   padding: 6px;
 }
-.team-header .app-title { color: var(--white); font-size: 24px; }
+.team-header .app-title {
+  color: var(--text-1);
+  font-size: 24px;
+  font-weight: 800;
+}
 
 .team-section { margin: 0 12px 12px; }
 .team-fixed   { table-layout: fixed; }
@@ -649,46 +760,40 @@ nav { display: flex; gap: 8px; }
 .pitchers colgroup col:nth-child(1)   { width: 38%; }
 .pitchers colgroup col:nth-child(n+2) { width: calc(62% / 9); }
 
-/* ==================================================
-   MASCOT WAVE ANIMATION
-   ================================================== */
-@keyframes bat-wave {
-  0%   { transform: rotate(0deg); }
-  25%  { transform: rotate(-5deg); }
-  50%  { transform: rotate(5deg); }
-  75%  { transform: rotate(-3deg); }
-  100% { transform: rotate(0deg); }
-}
-.logo:hover    .app-logo { animation: bat-wave .6s ease-in-out; }
-.logo.auto-wave .app-logo { animation: bat-wave .6s ease-in-out; }
-
-/* ==================================================
+/* ============================================================
    PLAYER CARD MODAL
-   ================================================== */
+   ============================================================ */
 
-/* Hero section */
+/* Narrow the player card overlay specifically */
+#playerModal {
+  max-width: 520px;
+}
+
+/* Hide the redundant title text in the player header — only Close button shows */
+#playerTitle { display: none; }
+
 .pc-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 16px 16px;
+  padding: 28px 16px 18px;
   gap: 8px;
-  background: linear-gradient(160deg, var(--surface) 0%, var(--white) 100%);
-  border-bottom: 2px solid var(--border);
+  background: linear-gradient(160deg, var(--pine-teal) 0%, var(--dark-cyan) 100%);
+  border-bottom: 1px solid var(--border);
 }
 .pc-headshot {
   width: 88px;
   height: 88px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--border);
-  background: var(--surface);
+  border: 3px solid rgba(255,255,255,.4);
+  background: rgba(255,255,255,.15);
   box-shadow: var(--sh-sm);
 }
 .pc-name {
   font-size: 22px;
   font-weight: 800;
-  color: var(--ink);
+  color: #fff;
   text-align: center;
 }
 .pc-team-row {
@@ -697,80 +802,80 @@ nav { display: flex; gap: 8px; }
   gap: 8px;
 }
 .pc-crest {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   padding: 2px;
   border-radius: 4px;
+  border: none;
+  background: transparent;
   flex-shrink: 0;
 }
-.pc-team-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink-2);
-}
+.pc-team-name { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.75); }
 
-/* Bio strip */
 .pc-bio {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px 18px;
-  padding: 12px 16px;
-  background: var(--surface);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  background: var(--surface-2);
   border-bottom: 1px solid var(--border);
 }
 .pc-bio-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1px;
+  gap: 3px;
+  padding: 11px 8px;
+  border-right: 1px solid var(--border-2);
+  border-bottom: 1px solid var(--border-2);
 }
+.pc-bio-item:nth-child(4n) { border-right: none; }
+.pc-bio-item:nth-last-child(-n+4):nth-child(4n+1),
+.pc-bio-item:nth-last-child(-n+3):nth-child(4n+2),
+.pc-bio-item:nth-last-child(-n+2):nth-child(4n+3),
+.pc-bio-item:nth-last-child(-n+1)  { border-bottom: none; }
+/* simpler: just remove bottom border on last row roughly */
+.pc-bio-item:last-child,
+.pc-bio-item:nth-last-child(2),
+.pc-bio-item:nth-last-child(3),
+.pc-bio-item:nth-last-child(4) { border-bottom: none; }
+
 .pc-bio-label {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .5px;
-  color: var(--ink-3);
+  color: var(--text-3);
 }
-.pc-bio-value {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink);
-}
+.pc-bio-value { font-size: 13px; font-weight: 700; color: var(--text-1); }
 
-/* Season stat groups */
 .pc-stat-group {
   margin: 12px 12px 0;
-  border: 2px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--r-lg);
   overflow: hidden;
 }
 .pc-stat-group-head {
   padding: 8px 14px;
-  background: var(--surface);
+  background: var(--surface-2);
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: .6px;
-  color: var(--ink-2);
+  color: var(--text-2);
   border-bottom: 1px solid var(--border);
 }
 .pc-stat-row {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  padding: 12px 8px;
-  gap: 4px;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 14px 10px;
+  gap: 8px 4px;
+  background: var(--surface-1);
 }
-.pc-stat-cell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-}
+.pc-stat-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .pc-stat-value {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 800;
-  color: var(--navy);
+  color: var(--dark-cyan);
   font-variant-numeric: tabular-nums;
 }
 .pc-stat-label {
@@ -778,15 +883,37 @@ nav { display: flex; gap: 8px; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .4px;
-  color: var(--ink-3);
+  color: var(--text-3);
 }
 
-/* Fun fact */
+/* ── Game log ── */
+.pc-gamelog {
+  margin: 12px 12px 0;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.pc-gamelog .pc-stat-group-head {
+  border-bottom: 1px solid var(--border);
+}
+.pc-log-table {
+  font-size: 12px;
+}
+.pc-log-table th {
+  font-size: 9px;
+  padding: 6px 8px;
+}
+.pc-log-table td {
+  padding: 7px 8px;
+  font-size: 12px;
+}
+.pc-log-table tbody tr:hover td { background: var(--surface-3); }
+
 .pc-fact {
   margin: 12px;
-  padding: 12px 14px;
-  background: linear-gradient(135deg, #FFFBF0, #FFF5D6);
-  border: 2px solid var(--yellow);
+  padding: 13px 15px;
+  background: var(--gold-dim);
+  border: 1.5px solid rgba(224,168,144,.5);
   border-radius: var(--r-lg);
 }
 .pc-fact-title {
@@ -794,90 +921,85 @@ nav { display: flex; gap: 8px; }
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: .6px;
-  color: #B07A10;
+  color: var(--gold);
   margin-bottom: 6px;
 }
 .pc-fact-text {
   margin: 0;
   font-size: 13px;
   line-height: 1.6;
-  color: var(--ink);
+  color: var(--text-1);
 }
 
-/* Loading state */
+/* Bottom breathing room */
+#playerContent > div > :last-child { margin-bottom: 16px; }
+
 .player-loading {
   padding: 40px;
   text-align: center;
-  color: var(--ink-3);
+  color: var(--text-2);
   font-size: 14px;
   font-weight: 600;
 }
 
-/* Box score row hover */
-.box-player-row:hover td { background: var(--surface); }
-
-/* ==================================================
+/* ============================================================
    STATS PAGE
-   ================================================== */
+   ============================================================ */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
 }
 
-/* Leaderboard card */
 .stat-card {
-  background: var(--white);
-  color: var(--ink);
+  background: var(--surface-1);
+  color: var(--text-1);
   border-radius: var(--r-lg);
-  box-shadow: var(--sh);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--sh-sm);
   overflow: hidden;
 }
 
+/* Skeleton loading */
 .stat-card--loading .stat-card-head {
   height: 52px;
-  background: var(--surface);
+  background: var(--surface-2);
   animation: shimmer 1.4s ease-in-out infinite;
 }
 .stat-card--loading .stat-skeleton-rows {
   height: 380px;
-  background: linear-gradient(var(--surface) 1px, var(--white) 1px);
-  background-size: 100% 38px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--surface-1) 0px,
+    var(--surface-1) 37px,
+    var(--border-2) 37px,
+    var(--border-2) 38px
+  );
   animation: shimmer 1.4s ease-in-out infinite;
 }
 @keyframes shimmer {
   0%, 100% { opacity: 1; }
-  50%       { opacity: .5; }
+  50%       { opacity: .4; }
 }
 
-/* Card header */
 .stat-card-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px;
-  background: var(--surface);
-  border-bottom: 2px solid var(--border);
+  padding: 11px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
 }
-.stat-card-head-left {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-.stat-card-title {
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--ink);
-}
+.stat-card-head-left { display: flex; align-items: baseline; gap: 8px; }
+.stat-card-title { font-size: 14px; font-weight: 800; color: var(--text-1); }
 .stat-card-abbr {
   font-size: 11px;
   font-weight: 700;
-  color: var(--ink-3);
+  color: var(--text-3);
   text-transform: uppercase;
   letter-spacing: .5px;
 }
 
-/* Info button */
 .stat-info-btn {
   display: inline-flex;
   align-items: center;
@@ -887,74 +1009,55 @@ nav { display: flex; gap: 8px; }
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--ink-3);
+  color: var(--text-3);
   cursor: pointer;
   transition: background .15s, color .15s;
   flex-shrink: 0;
 }
 .stat-info-btn:hover,
-.stat-info-btn--active { background: var(--border); color: var(--navy); }
+.stat-info-btn--active { background: var(--surface-3); color: var(--dark-cyan); }
 
-/* Info drawer */
 .stat-info-drawer {
   max-height: 0;
   overflow: hidden;
   transition: max-height .3s ease, padding .3s ease;
-  background: #EEF2FF;
+  background: var(--accent-dim);
   border-bottom: 1px solid var(--border);
 }
-.stat-info-drawer--open {
-  max-height: 160px;
-  padding: 10px 14px;
-}
-.stat-info-text {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--ink);
-}
+.stat-info-drawer--open { max-height: 160px; padding: 10px 14px; }
+.stat-info-text { margin: 0; font-size: 13px; line-height: 1.55; color: var(--text-1); }
 
-/* Leaderboard list */
-.stat-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+.stat-list  { list-style: none; }
 .stat-row {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 8px 14px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-2);
   cursor: pointer;
   transition: background .12s;
 }
 .stat-row:last-child { border-bottom: none; }
-.stat-row:hover      { background: var(--surface); }
-.stat-row:active     { background: var(--border); }
+.stat-row:hover  { background: var(--surface-2); }
+.stat-row:active { background: var(--surface-3); }
 
 .stat-rank {
   width: 20px;
   font-size: 12px;
   font-weight: 700;
-  color: var(--ink-3);
+  color: var(--text-3);
   text-align: center;
   flex-shrink: 0;
 }
-.stat-row:nth-child(1) .stat-rank { color: #C8912A; }
-.stat-row:nth-child(2) .stat-rank { color: var(--ink-2); }
+.stat-row:nth-child(1) .stat-rank { color: #B8860B; }
+.stat-row:nth-child(2) .stat-rank { color: var(--text-2); }
 .stat-row:nth-child(3) .stat-rank { color: #A0674A; }
 
-.stat-player-info {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-}
+.stat-player-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 .stat-player-name {
   font-size: 13px;
   font-weight: 700;
-  color: var(--ink);
+  color: var(--text-1);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -962,7 +1065,7 @@ nav { display: flex; gap: 8px; }
 .stat-player-team {
   font-size: 11px;
   font-weight: 600;
-  color: var(--ink-3);
+  color: var(--text-3);
   text-transform: uppercase;
   letter-spacing: .4px;
 }
@@ -970,7 +1073,7 @@ nav { display: flex; gap: 8px; }
 .stat-value {
   font-size: 15px;
   font-weight: 800;
-  color: var(--navy);
+  color: var(--dark-cyan);
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
 }
@@ -978,20 +1081,45 @@ nav { display: flex; gap: 8px; }
 .stat-empty {
   padding: 24px 14px;
   font-size: 13px;
-  color: var(--ink-3);
+  color: var(--text-2);
   text-align: center;
 }
 
-/* ==================================================
-   RESPONSIVE
-   ================================================== */
-@media (max-width: 900px) {
-  .logo .app-logo { height: 108px; }
-}
-@media (max-width: 640px) {
-  .logo            { top: -6px; }
-  .logo .app-logo  { height: 92px; }
-  .app-title       { font-size: 18px; }
-  .grid            { grid-template-columns: 1fr; }
-  .stats-grid      { grid-template-columns: 1fr; }
+/* ============================================================
+   RESPONSIVE — portrait / small screen fallback
+   ============================================================ */
+@media (max-width: 768px), (orientation: portrait) {
+  .app-shell    { flex-direction: column; }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    order: 2;
+  }
+  .sidebar-brand, .sidebar-footer { display: none; }
+  .sidebar-nav {
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 6px 8px;
+    width: 100%;
+    gap: 0;
+  }
+  .nav-item {
+    flex-direction: column;
+    gap: 3px;
+    padding: 8px 6px;
+    font-size: 11px;
+    align-items: center;
+    flex: 1;
+    border-radius: var(--r-sm);
+  }
+  .main-content {
+    order: 1;
+    height: calc(100dvh - 62px);
+    height: calc(100vh - 62px);
+    padding: 14px;
+  }
+  .grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
 }

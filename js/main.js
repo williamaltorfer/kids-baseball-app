@@ -13,7 +13,7 @@ const routes = {
 
 function setActiveTab(){
   const h = location.hash || '#/scores';
-  $$('.tab').forEach(b=> b.setAttribute('aria-current', b.dataset.route===h ? 'page' : 'false'));
+  $$('.nav-item').forEach(b=> b.setAttribute('aria-current', b.dataset.route===h ? 'page' : 'false'));
 }
 
 function render(){
@@ -30,7 +30,7 @@ function render(){
 const state = { date: toDateKey(new Date()) };
 
 // wire navigation
-$$('.tab').forEach(btn => btn.addEventListener('click', ()=>{ location.hash = btn.dataset.route; }));
+$$('.nav-item').forEach(btn => btn.addEventListener('click', ()=>{ location.hash = btn.dataset.route; }));
 document.getElementById('boxClose').addEventListener('click', ()=> document.getElementById('overlay').style.display='none');
 document.getElementById('overlay').addEventListener('click', (e)=>{ if(e.target.id==='overlay') document.getElementById('overlay').style.display='none'; });
 

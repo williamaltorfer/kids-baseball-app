@@ -44,7 +44,7 @@ export async function renderStandings(){
     for(const key of Object.keys(cache.leagues)){
       const card = document.createElement('div'); card.className='stand-card';
       card.innerHTML = `<div class='head'>${key}</div>`;
-      card.append(makeStandTable(cache.leagues[key], key));
+      card.append(makeStandTable(cache.leagues[key], key, true));
       wrap.append(card);
     }
   }
@@ -52,7 +52,7 @@ export async function renderStandings(){
     setSeg('mlb'); wrap.innerHTML='';
     const card = document.createElement('div'); card.className='stand-card';
     card.innerHTML = `<div class='head'>Overall MLB</div>`;
-    card.append(makeStandTable(cache.all, 'MLB'));
+    card.append(makeStandTable(cache.all, 'MLB', true));
     wrap.append(card);
   }
 
@@ -107,7 +107,7 @@ function computeGBForGroup(rows){
   });
 }
 
-function makeStandTable(rows, groupLabel){
+function makeStandTable(rows, groupLabel, showRank=false){
   // rows already sorted by pct desc; recompute GB relative to leader of this subset
   const withGB = computeGBForGroup(rows);
 
@@ -120,9 +120,10 @@ function makeStandTable(rows, groupLabel){
       </tr>
     </thead>
     <tbody>
-      ${withGB.map(r=>`
+      ${withGB.map((r,i)=>`
         <tr data-team='${r.teamId}'>
           <td class='stand-team'>
+            ${showRank ? `<span class='stand-rank'>${i+1}</span>` : ''}
             <span class='crest' data-team-crest='${r.teamId}'></span>
             <span>${escapeHtml(r.teamName)}</span>
           </td>
