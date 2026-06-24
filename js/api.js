@@ -5,6 +5,8 @@ export const MLB = {
   content: (gamePk)=> `https://statsapi.mlb.com/api/v1/game/${gamePk}/content`,
   standings: (season)=> `https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason&hydrate=team(division,league)`,
   team: (teamId)=> `https://statsapi.mlb.com/api/v1/teams/${teamId}`,
+  teams: (season)=> `https://statsapi.mlb.com/api/v1/teams?sportId=1&season=${season}`,
+  venueDetail: (id)=> `https://statsapi.mlb.com/api/v1/venues/${id}?hydrate=location,fieldInfo`,
   rosterActive: (teamId)=> `https://statsapi.mlb.com/api/v1/teams/${teamId}/roster?rosterType=active`,
   peopleStats: (ids, season)=> `https://statsapi.mlb.com/api/v1/people?personIds=${ids.join(',')}&hydrate=stats(group=[hitting,pitching],type=[season],season=${season})`,
   headshot: (id)=> `https://img.mlbstatic.com/mlb-photos/image/upload/w_56,q_auto:best/v1/people/${id}/headshot/67/current`,

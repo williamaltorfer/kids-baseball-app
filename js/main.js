@@ -3,12 +3,14 @@ import { renderScores } from './scores.js';
 import { renderStandings } from './standings.js';
 import { renderTeam } from './team.js';
 import { renderStats } from './stats.js';
+import { renderVenues } from './venues.js';
 
 // Simple router
 const routes = {
-  '#/scores':   (state) => renderScores(state),
-  '#/standings':(state) => renderStandings(state),
-  '#/stats':    (state) => renderStats(state),
+  '#/scores':    (state) => renderScores(state),
+  '#/standings': (state) => renderStandings(state),
+  '#/stats':     (state) => renderStats(state),
+  '#/ballparks': ()      => renderVenues(),
 };
 
 function setActiveTab(){
