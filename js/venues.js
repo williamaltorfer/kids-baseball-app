@@ -202,22 +202,26 @@ const WIKI_OVERRIDES = {
   'Rate Field':                       'Guaranteed_Rate_Field',     // MLB API truncates the name
   'Guaranteed Rate Field':            'Guaranteed_Rate_Field',     // in case full name is returned
   'Great American Ballpark':          'Great_American_Ball_Park',  // Wikipedia uses two words
-  'Uniqlo Field at Dodger Stadium':   'Dodger_Stadium',            // new naming rights deal
+  'UNIQLO Field at Dodger Stadium':   'Dodger_Stadium',            // all-caps brand name
+  'Uniqlo Field at Dodger Stadium':   'Dodger_Stadium',            // alternate casing
   'Uniqlo Field at Dodgers Stadium':  'Dodger_Stadium',            // alternate form
 };
 
+// Direct Wikimedia image URLs for venues where the pageimages API can't find a photo
+const WIKI_DIRECT_IMAGES = {
+  'Rate Field':          'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Chicago%2C_Illinois%2C_U.S._%282023%29_-_062.jpg/960px-Chicago%2C_Illinois%2C_U.S._%282023%29_-_062.jpg',
+  'Guaranteed Rate Field': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Chicago%2C_Illinois%2C_U.S._%282023%29_-_062.jpg/960px-Chicago%2C_Illinois%2C_U.S._%282023%29_-_062.jpg',
+};
+
 async function fetchWikiPhoto(venueName) {
+  if (WIKI_DIRECT_IMAGES[venueName]) return WIKI_DIRECT_IMAGES[venueName];
   const title = WIKI_OVERRIDES[venueName] || venueName.replace(/ /g, '_');
-  console.log(`[venues] "${venueName}" → "${title}"`);
   try {
     const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=800&origin=*`;
     const data = await fetchJSON(url);
     const page = Object.values(data?.query?.pages || {})[0];
-    const src = page?.thumbnail?.source ?? null;
-    if (!src) console.warn(`[venues] no image returned for "${title}"`);
-    return src;
-  } catch (e) {
-    console.warn(`[venues] fetch error for "${title}":`, e);
+    return page?.thumbnail?.source ?? null;
+  } catch {
     return null;
   }
 }
