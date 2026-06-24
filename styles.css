@@ -1095,6 +1095,9 @@ html, body {
   gap: 12px;
   margin-bottom: 16px;
 }
+.venues-controls .seg {
+  margin-bottom: 0;
+}
 
 .venues-search {
   flex: 1;
