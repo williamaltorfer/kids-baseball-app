@@ -1,4 +1,5 @@
 import { $, $$, toDateKey, fromKey, localTime, dayLabel, btnIcon, labelStatus, escapeHtml, safe, num, avatarFor } from './utils.js';
+import { openPlayerCard } from './player.js';
 import { MLB, getSchedule, getLive, getContent } from './api.js';
 import { setTeamLogo, linescoreTable } from './components.js';
 import { findRecapFromContent } from './media.js';
@@ -121,6 +122,7 @@ function formatPitcherName(fullName){
 function makePitcherCell(label, name, pitcherId){
   const cell = document.createElement('div');
   cell.className = 'card-pitcher';
+  if(pitcherId){ cell.style.cursor = 'pointer'; cell.addEventListener('click', e => { e.stopPropagation(); openPlayerCard(pitcherId); }); }
   const city = document.createElement('div');
   city.className = 'card-pitcher-city';
   city.textContent = label || '';
@@ -218,7 +220,7 @@ function battingSubcard(title, rows){
     </thead>
     <tbody>
       ${rows.map(r=>`
-        <tr>
+        <tr class='box-player-row' data-person-id='${r.id||''}' style='cursor:${r.id?'pointer':'default'}'>
           <td>
             <div class='player'>
               <img src='${r.headshot}' onerror="this.onerror=null;this.src='${avatarFor(r.name)}'" alt='' class='avatar' />
@@ -237,6 +239,10 @@ function battingSubcard(title, rows){
         </tr>
       `).join('')}
     </tbody>`;
+  table.addEventListener('click', e => {
+    const tr = e.target.closest('tr[data-person-id]');
+    if(tr?.dataset.personId) openPlayerCard(Number(tr.dataset.personId));
+  });
   body.append(table); card.append(body); return card;
 }
 
@@ -258,7 +264,7 @@ function pitchingSubcard(title, rows){
     </thead>
     <tbody>
       ${rows.map(r=>`
-        <tr>
+        <tr class='box-player-row' data-person-id='${r.id||''}' style='cursor:${r.id?'pointer':'default'}'>
           <td>
             <div class='player'>
               <img src='${r.headshot}' onerror="this.onerror=null;this.src='${avatarFor(r.name)}'" alt='' class='avatar' />
@@ -277,6 +283,10 @@ function pitchingSubcard(title, rows){
         </tr>
       `).join('')}
     </tbody>`;
+  table.addEventListener('click', e => {
+    const tr = e.target.closest('tr[data-person-id]');
+    if(tr?.dataset.personId) openPlayerCard(Number(tr.dataset.personId));
+  });
   body.append(table); card.append(body); return card;
 }
 
@@ -325,13 +335,13 @@ function playersFromBox(playersObj){
     const headshot = id ? MLB.headshot(id) : undefined;
     if(bat && appearedBatting(bat)){
       const avg = bat.avg || p.seasonStats?.batting?.avg || computeAVGFrom(bat);
-      batting.push({ name, pos, stats:{
+      batting.push({ name, pos, id, stats:{
         AB: bat.atBats, R: bat.runs, H: bat.hits, RBI: bat.rbi, BB: bat.baseOnBalls, SO: bat.strikeOuts, HR: bat.homeRuns, AVG: avg
       }, headshot });
     }
     if(pit && appearedPitching(pit)){
       const era = pit.era || p.seasonStats?.pitching?.era || computeERAFrom(pit);
-      pitching.push({ name, notes: p.note || pit.note || pit.decision || '', stats:{
+      pitching.push({ name, id, notes: p.note || pit.note || pit.decision || '', stats:{
         IP: pit.inningsPitched, H: pit.hits, R: pit.runs, ER: pit.earnedRuns, BB: pit.baseOnBalls, SO: pit.strikeOuts, HR: pit.homeRuns, ERA: era
       }, headshot });
     }

@@ -10,6 +10,10 @@ export const MLB = {
   headshot: (id)=> `https://img.mlbstatic.com/mlb-photos/image/upload/w_56,q_auto:best/v1/people/${id}/headshot/67/current`,
   leaders: (category, season, limit=10)=>
     `https://statsapi.mlb.com/api/v1/stats/leaders?leaderCategories=${category}&season=${season}&limit=${limit}&sportId=1&hydrate=person,team`,
+  person: (id)=>
+    `https://statsapi.mlb.com/api/v1/people/${id}?hydrate=currentTeam`,
+  personStats: (id, season)=>
+    `https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=season&season=${season}&group=hitting,pitching`,
   teamLogos: (id)=> [
     `https://www.mlbstatic.com/team-logos/${id}.svg`,
     `https://www.mlbstatic.com/team-logos/team-primary-on-light/${id}.svg`,

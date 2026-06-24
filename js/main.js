@@ -37,6 +37,9 @@ document.getElementById('overlay').addEventListener('click', (e)=>{ if(e.target.
 document.getElementById('hlClose').addEventListener('click', ()=> document.getElementById('hlOverlay').style.display='none');
 document.getElementById('hlOverlay').addEventListener('click', (e)=>{ if(e.target.id==='hlOverlay') document.getElementById('hlOverlay').style.display='none'; });
 
+document.getElementById('playerClose').addEventListener('click', ()=> document.getElementById('playerOverlay').style.display='none');
+document.getElementById('playerOverlay').addEventListener('click', (e)=>{ if(e.target.id==='playerOverlay') document.getElementById('playerOverlay').style.display='none'; });
+
 setActiveTab();
 window.addEventListener('hashchange', ()=>{ setActiveTab(); render(); });
 render();

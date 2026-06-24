@@ -1,5 +1,6 @@
 import { escapeHtml } from './utils.js';
 import { MLB, getLeaders } from './api.js';
+import { openPlayerCard } from './player.js';
 
 const SEASON = new Date().getFullYear();
 
@@ -248,6 +249,7 @@ function makeLeaderCard(def, data) {
     val.className = 'stat-value';
     val.textContent = value;
 
+    if (personId) li.addEventListener('click', () => openPlayerCard(personId));
     li.append(rank, avatar, info, val);
     list.append(li);
   });

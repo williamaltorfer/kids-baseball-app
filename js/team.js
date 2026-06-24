@@ -1,6 +1,7 @@
 import { btnIcon, escapeHtml, safe, formatAVG, avatarFor } from './utils.js';
 import { MLB, getTeam, getRosterActive, getPeopleStats, fetchJSON } from './api.js';
 import { setTeamLogo } from './components.js';
+import { openPlayerCard } from './player.js';
 
 
 async function getRecentBattingOrder(teamId){
@@ -162,7 +163,7 @@ function rosterTableHitters(label, rows, orderMap={}, lineupDate=''){
     </thead>
     <tbody>
       ${rows.map(r=>`
-        <tr>
+        <tr data-person-id='${r.id||''}' style='cursor:${r.id?'pointer':'default'}'>
           <td><div class='player'><img src='${MLB.headshot(r.id)}' onerror="this.onerror=null;this.src='${avatarFor(r.name)}'" class='avatar' alt='' /><span class='name'>${escapeHtml(r.name)}</span></div></td>
           <td>${escapeHtml(r.pos||'')}</td>
           <td class='num'>${safe(r.stat.games ?? r.stat.gamesPlayed)}</td>
@@ -173,6 +174,10 @@ function rosterTableHitters(label, rows, orderMap={}, lineupDate=''){
           <td class='num'>${formatAVG(r.stat.avg)}</td>
         </tr>`).join('')}
     </tbody>`;
+  table.addEventListener('click', e => {
+    const tr = e.target.closest('tr[data-person-id]');
+    if(tr?.dataset.personId) openPlayerCard(Number(tr.dataset.personId));
+  });
   wrap.append(table); return wrap;
 }
 
@@ -190,7 +195,7 @@ function rosterTablePitchers(label, rows){
     </thead>
     <tbody>
       ${rows.map(r=>`
-        <tr>
+        <tr data-person-id='${r.id||''}' style='cursor:${r.id?'pointer':'default'}'>
           <td><div class='player'><img src='${MLB.headshot(r.id)}' onerror="this.onerror=null;this.src='${avatarFor(r.name)}'" class='avatar' alt='' /><span class='name'>${escapeHtml(r.name)}</span></div></td>
           <td class='num'>${safe(r.stat.games ?? r.stat.gamesPlayed)}</td>
           <td class='num'>${safe(r.stat.gamesStarted)}</td>
@@ -203,6 +208,10 @@ function rosterTablePitchers(label, rows){
           <td class='num'>${safe(r.stat.era)}</td>
         </tr>`).join('')}
     </tbody>`;
+  table.addEventListener('click', e => {
+    const tr = e.target.closest('tr[data-person-id]');
+    if(tr?.dataset.personId) openPlayerCard(Number(tr.dataset.personId));
+  });
   wrap.append(table); return wrap;
 }
 
