@@ -198,18 +198,20 @@ function makeCard(team, venue) {
 // ── Wikipedia photo helper ────────────────────────────────────────────────────
 
 const WIKI_OVERRIDES = {
-  'loanDepot park': 'loanDepot_Park',
+  'loanDepot park':          'loanDepot_Park',
+  'Rate Field':              'Guaranteed_Rate_Field',       // MLB API truncates the name
+  'Great American Ballpark': 'Great_American_Ball_Park',   // Wikipedia uses two words
 };
 
 async function fetchWikiPhoto(venueName) {
   const title = WIKI_OVERRIDES[venueName] || venueName.replace(/ /g, '_');
   try {
-    const data = await fetchJSON(
-      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`
-    );
-    const raw = data.originalimage?.source || data.thumbnail?.source;
-    if (!raw) return null;
-    return raw.includes('/thumb/') ? raw.replace(/\/\d+px-/, '/800px-') : raw;
+    // MediaWiki pageimages API is more reliable than the REST summary endpoint,
+    // which only returns thumbnails for articles with a recognized "lead image".
+    const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=800&origin=*`;
+    const data = await fetchJSON(url);
+    const page = Object.values(data?.query?.pages || {})[0];
+    return page?.thumbnail?.source ?? null;
   } catch {
     return null;
   }
