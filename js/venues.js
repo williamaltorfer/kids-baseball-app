@@ -208,14 +208,16 @@ const WIKI_OVERRIDES = {
 
 async function fetchWikiPhoto(venueName) {
   const title = WIKI_OVERRIDES[venueName] || venueName.replace(/ /g, '_');
+  console.log(`[venues] "${venueName}" → "${title}"`);
   try {
-    // MediaWiki pageimages API is more reliable than the REST summary endpoint,
-    // which only returns thumbnails for articles with a recognized "lead image".
     const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=800&origin=*`;
     const data = await fetchJSON(url);
     const page = Object.values(data?.query?.pages || {})[0];
-    return page?.thumbnail?.source ?? null;
-  } catch {
+    const src = page?.thumbnail?.source ?? null;
+    if (!src) console.warn(`[venues] no image returned for "${title}"`);
+    return src;
+  } catch (e) {
+    console.warn(`[venues] fetch error for "${title}":`, e);
     return null;
   }
 }
