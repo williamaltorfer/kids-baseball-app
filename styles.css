@@ -1086,6 +1086,169 @@ html, body {
 }
 
 /* ============================================================
+   VENUES PAGE (Ballpark Explorer)
+   ============================================================ */
+.venues-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.venues-search {
+  flex: 1;
+  min-width: 200px;
+  height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-xl);
+  background: var(--surface-1);
+  color: var(--text-1);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--sh-sm);
+  outline: none;
+  transition: border-color .15s;
+}
+.venues-search:focus { border-color: var(--accent); }
+.venues-search::placeholder { color: var(--text-3); }
+
+.venues-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+/* ── Venue Card ── */
+.vcard {
+  background: var(--surface-1);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh-sm);
+  transition: transform .15s, box-shadow .15s, border-color .15s;
+}
+.vcard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh);
+  border-color: var(--dark-cyan);
+}
+
+.vcard-hero {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--pine-teal);
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+.vcard-crest {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-sm);
+  padding: 4px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  flex-shrink: 0;
+}
+.vcard-meta { min-width: 0; }
+.vcard-team {
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vcard-division {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,.58);
+  margin-top: 2px;
+}
+
+.vcard-body {
+  padding: 12px 14px 0;
+}
+.vcard-stadium {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-1);
+  line-height: 1.25;
+}
+.vcard-city {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-3);
+  margin-top: 3px;
+}
+
+.vcard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 12px;
+  border-top: 1px solid var(--border-2);
+}
+.vcard-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 6px;
+  border-right: 1px solid var(--border-2);
+}
+.vcard-stat:last-child { border-right: none; }
+.vcard-stat-val {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-1);
+}
+.vcard-stat-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--text-3);
+}
+
+.vcard-dims {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--surface-2);
+  border-top: 1px solid var(--border-2);
+}
+.vcard-dim {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 6px;
+  border-right: 1px solid var(--border-2);
+}
+.vcard-dim:last-child { border-right: none; }
+.vcard-dim-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--dark-cyan);
+  font-variant-numeric: tabular-nums;
+}
+.vcard-dim-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--text-3);
+}
+
+.vcard--loading {
+  min-height: 210px;
+  background: var(--surface-2);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* ============================================================
    RESPONSIVE — portrait / small screen fallback
    ============================================================ */
 @media (max-width: 768px), (orientation: portrait) {
@@ -1122,4 +1285,7 @@ html, body {
   }
   .grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr; }
+  .venues-grid { grid-template-columns: 1fr; }
+  .venues-controls { flex-direction: column; align-items: stretch; }
+  .venues-search { min-width: unset; }
 }
