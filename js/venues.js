@@ -198,9 +198,12 @@ function makeCard(team, venue) {
 // ── Wikipedia photo helper ────────────────────────────────────────────────────
 
 const WIKI_OVERRIDES = {
-  'loanDepot park':          'loanDepot_Park',
-  'Rate Field':              'Guaranteed_Rate_Field',       // MLB API truncates the name
-  'Great American Ballpark': 'Great_American_Ball_Park',   // Wikipedia uses two words
+  'loanDepot park':                   'loanDepot_Park',
+  'Rate Field':                       'Guaranteed_Rate_Field',     // MLB API truncates the name
+  'Guaranteed Rate Field':            'Guaranteed_Rate_Field',     // in case full name is returned
+  'Great American Ballpark':          'Great_American_Ball_Park',  // Wikipedia uses two words
+  'Uniqlo Field at Dodger Stadium':   'Dodger_Stadium',            // new naming rights deal
+  'Uniqlo Field at Dodgers Stadium':  'Dodger_Stadium',            // alternate form
 };
 
 async function fetchWikiPhoto(venueName) {
