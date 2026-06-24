@@ -8,12 +8,14 @@ export const MLB = {
   rosterActive: (teamId)=> `https://statsapi.mlb.com/api/v1/teams/${teamId}/roster?rosterType=active`,
   peopleStats: (ids, season)=> `https://statsapi.mlb.com/api/v1/people?personIds=${ids.join(',')}&hydrate=stats(group=[hitting,pitching],type=[season],season=${season})`,
   headshot: (id)=> `https://img.mlbstatic.com/mlb-photos/image/upload/w_56,q_auto:best/v1/people/${id}/headshot/67/current`,
-  leaders: (category, season, limit=10)=>
-    `https://statsapi.mlb.com/api/v1/stats/leaders?leaderCategories=${category}&season=${season}&limit=${limit}&sportId=1&hydrate=person,team`,
+  leaders: (category, season, limit=10, statGroup='')=>
+    `https://statsapi.mlb.com/api/v1/stats/leaders?leaderCategories=${category}&season=${season}&limit=${limit}&sportId=1&hydrate=person,team${statGroup ? `&statGroup=${statGroup}` : ''}`,
   person: (id)=>
     `https://statsapi.mlb.com/api/v1/people/${id}?hydrate=currentTeam`,
   personStats: (id, season)=>
     `https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=season&season=${season}&group=hitting,pitching`,
+  gameLog: (id, group, season)=>
+    `https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=gameLog&group=${group}&season=${season}`,
   teamLogos: (id)=> [
     `https://www.mlbstatic.com/team-logos/${id}.svg`,
     `https://www.mlbstatic.com/team-logos/team-primary-on-light/${id}.svg`,
@@ -58,7 +60,7 @@ export async function getSchedule(dateKey){
 }
 
 export const getLive = (gamePk) => fetchJSON(MLB.live(gamePk));
-export const getLeaders = (category, season, limit=10) => fetchJSON(MLB.leaders(category, season, limit));
+export const getLeaders = (category, season, limit=10, statGroup='') => fetchJSON(MLB.leaders(category, season, limit, statGroup));
 export const getContent = (gamePk) => fetchJSON(MLB.content(gamePk));
 
 // Standings helpers

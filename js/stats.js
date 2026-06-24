@@ -8,74 +8,73 @@ const SEASON = new Date().getFullYear();
 
 const HITTING = [
   {
-    key: 'battingAverage', label: 'Batting Average', abbr: 'AVG', fmt: v => v,
+    key: 'battingAverage', label: 'Batting Average', abbr: 'AVG', fmt: v => v, statGroup: 'hitting',
     info: 'How often a batter gets a hit. Divide hits by at-bats. A .300 average means getting a hit 3 out of every 10 trips to the plate — that\'s really good!'
   },
   {
-    key: 'homeRuns', label: 'Home Runs', abbr: 'HR', fmt: v => v,
+    key: 'homeRuns', label: 'Home Runs', abbr: 'HR', fmt: v => v, statGroup: 'hitting',
     info: 'When the batter hits the ball over the outfield fence, everyone on base scores — including them! The most exciting swing in baseball. 💥'
   },
   {
-    key: 'runsBattedIn', label: 'Runs Batted In', abbr: 'RBI', fmt: v => v,
+    key: 'runsBattedIn', label: 'Runs Batted In', abbr: 'RBI', fmt: v => v, statGroup: 'hitting',
     info: 'Every time a batter\'s hit (or walk) lets a teammate cross home plate, that\'s an RBI. It measures how well you help your team score runs.'
   },
   {
-    key: 'hits', label: 'Hits', abbr: 'H', fmt: v => v,
+    key: 'hits', label: 'Hits', abbr: 'H', fmt: v => v, statGroup: 'hitting',
     info: 'Total number of times a batter safely reached base because they hit the ball. Includes singles, doubles, triples, and home runs.'
   },
   {
-    key: 'runs', label: 'Runs Scored', abbr: 'R', fmt: v => v,
+    key: 'runs', label: 'Runs Scored', abbr: 'R', fmt: v => v, statGroup: 'hitting',
     info: 'How many times a player crossed home plate and scored a run for their team. You can score by hitting, walking, or being fast on the bases!'
   },
   {
-    key: 'onBasePlusSlugging', label: 'OPS', abbr: 'OPS', fmt: v => v,
+    key: 'onBasePlusSlugging', label: 'OPS', abbr: 'OPS', fmt: v => v, statGroup: 'hitting',
     info: 'On-base Plus Slugging — adds how often you get on base to how much power you hit with. Above 1.000 means you\'re one of the best hitters in baseball. The ultimate all-around hitting number!'
   },
 ];
 
 const PITCHING = [
   {
-    key: 'earnedRunAverage', label: 'ERA', abbr: 'ERA', fmt: v => v,
+    key: 'earnedRunAverage', label: 'ERA', abbr: 'ERA', fmt: v => v, statGroup: 'pitching',
     info: 'Earned Run Average — the average number of runs a pitcher allows over 9 innings. Lower is better. Below 3.00 is excellent; the best pitchers are below 2.00!'
   },
   {
-    key: 'strikeouts', label: 'Strikeouts', abbr: 'SO', fmt: v => v,
+    key: 'strikeouts', label: 'Strikeouts', abbr: 'SO', fmt: v => v, statGroup: 'pitching',
     info: 'Every time a pitcher gets three strikes on a batter, that\'s a strikeout (K). The most dominant pitchers rack up hundreds of Ks in a season. ⚡'
   },
   {
-    key: 'wins', label: 'Wins', abbr: 'W', fmt: v => v,
+    key: 'wins', label: 'Wins', abbr: 'W', fmt: v => v, statGroup: 'pitching',
     info: 'A pitcher earns a win when they were pitching when their team took the lead for good. Starting pitchers who win 15+ games in a season are considered elite.'
   },
   {
-    key: 'saves', label: 'Saves', abbr: 'SV', fmt: v => v,
+    key: 'saves', label: 'Saves', abbr: 'SV', fmt: v => v, statGroup: 'pitching',
     info: 'When a relief pitcher comes in late in a close game and holds the lead, they get a save. The closer is usually the team\'s best reliever.'
   },
   {
-    key: 'whip', label: 'WHIP', abbr: 'WHIP', fmt: v => v,
+    key: 'whip', label: 'WHIP', abbr: 'WHIP', fmt: v => v, statGroup: 'pitching',
     info: 'Walks + Hits per Inning Pitched. Measures how many baserunners a pitcher allows each inning. Below 1.00 is outstanding — fewer runners means fewer runs!'
   },
   {
-    key: 'strikeoutsPer9Inn', label: 'K/9', abbr: 'K/9', fmt: v => v,
+    key: 'strikeoutsPer9Inn', label: 'K/9', abbr: 'K/9', fmt: v => v, statGroup: 'pitching',
     info: 'Strikeouts per 9 innings — if a pitcher pitched a full game, how many batters would they strike out? Above 10 means nearly a strikeout an inning. Filthy! 🔥'
   },
 ];
 
 const FUN = [
   {
-    key: 'triples', label: 'Triples', abbr: '3B', fmt: v => v,
+    key: 'triples', label: 'Triples', abbr: '3B', fmt: v => v, statGroup: 'hitting',
     info: 'The rarest and most exciting hit in baseball! A triple means you hit the ball into the gap and ran all the way to third base. Speed + power combined. 🚀'
   },
   {
-    key: 'stolenBases', label: 'Stolen Bases', abbr: 'SB', fmt: v => v,
+    key: 'stolenBases', label: 'Stolen Bases', abbr: 'SB', fmt: v => v, statGroup: 'hitting',
     info: 'When a baserunner takes off and reaches the next base before the catcher can throw them out. Pure speed and smarts — no bat swing needed! 💨'
   },
   {
-    key: 'totalBases', label: 'Total Bases', abbr: 'TB', fmt: v => v,
+    key: 'totalBases', label: 'Total Bases', abbr: 'TB', fmt: v => v, statGroup: 'hitting',
     info: 'Add up all the bases from every hit: 1 for a single, 2 for a double, 3 for a triple, 4 for a homer. High total bases = super powerful hitter!'
   },
   {
-    key: 'strikeouts', label: 'Pitcher Strikeouts', abbr: 'K', fmt: v => v,
-    statGroup: 'pitching',
+    key: 'strikeouts', label: 'Pitcher Strikeouts', abbr: 'K', fmt: v => v, statGroup: 'pitching',
     info: 'Some pitchers can strike out over 300 batters in one season — that\'s nearly 2 per inning! Batters see a pitch so nasty they can\'t even touch it. ⚡'
   },
 ];
@@ -133,7 +132,7 @@ export async function renderStats(state) {
 
     // Fire all leader requests in parallel
     const results = await Promise.allSettled(
-      defs.map(d => getLeaders(d.key, SEASON, 10).then(data => ({ def: d, data })))
+      defs.map(d => getLeaders(d.key, SEASON, 10, d.statGroup || '').then(data => ({ def: d, data })))
     );
 
     segGrid.innerHTML = '';

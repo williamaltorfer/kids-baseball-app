@@ -3,48 +3,98 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Baseball Funtimes!</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Theo's Baseball</title>
+
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="/kids-baseball-app/manifest.webmanifest">
-  
-  <!-- iOS Home Screen icon -->
+
   <link rel="apple-touch-icon" sizes="180x180" href="/kids-baseball-app/icons/apple-touch-icon.png">
   <link rel="apple-touch-icon" sizes="152x152" href="/kids-baseball-app/icons/apple-touch-icon-152x152.png">
   <link rel="apple-touch-icon" sizes="120x120" href="/kids-baseball-app/icons/apple-touch-icon-120x120.png">
   <link rel="apple-touch-icon" sizes="76x76"   href="/kids-baseball-app/icons/apple-touch-icon-76x76.png">
-  
- 
-  <meta name="theme-color" content="#E94E41">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Theo’s Baseball App">
 
+  <meta name="theme-color" content="#0C1220">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Theo's Baseball">
 </head>
 <body>
-  <header>
-    <div class="wrap">
-      <div class="titlebar">
-        <div class="title-left">
-          <div class="app-title"></div>
-          <div class="logo" aria-label="Baseball Emoji"><img src="assets/Logo.png" alt="Theo's Baseball App Logo" class="app-logo"></div>
-        </div>
-        <nav>
-          <button class="tab" data-route="#/scores">Scores</button>
-          <button class="tab" data-route="#/standings">Standings</button>
-          <button class="tab" data-route="#/stats">Stats</button>
-        </nav>
-      </div>
-    </div>
-  </header>
-  <main class="wrap">
-    <div id="view"></div>
-  </main>
 
-  <!-- Box score overlay -->
+  <div class="app-shell">
+
+    <!-- ── Sidebar ── -->
+    <nav class="sidebar">
+
+      <div class="sidebar-brand">
+        <!-- Baseball mark -->
+        <svg class="app-mark" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="20" cy="20" r="18" fill="#F5F5F5"/>
+          <path d="M15 3.5 C17.5 10 17.5 30 15 36.5" stroke="#CC3433" stroke-width="2" stroke-linecap="round"/>
+          <path d="M25 3.5 C22.5 10 22.5 30 25 36.5" stroke="#CC3433" stroke-width="2" stroke-linecap="round"/>
+          <line x1="12" y1="12"  x2="16" y2="13.5" stroke="#CC3433" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="11" y1="17"  x2="16" y2="18"   stroke="#CC3433" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="11" y1="22"  x2="16" y2="22"   stroke="#CC3433" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="11" y1="27"  x2="16" y2="26"   stroke="#CC3433" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="28" y1="12"  x2="24" y2="13.5" stroke="#CC3433" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="29" y1="17"  x2="24" y2="18"   stroke="#CC3433" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="29" y1="22"  x2="24" y2="22"   stroke="#CC3433" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="29" y1="27"  x2="24" y2="26"   stroke="#CC3433" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        <div class="sidebar-brand-text">
+          <div class="app-wordmark">Theo's Baseball</div>
+          <div class="app-greeting"></div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <button class="nav-item" data-route="#/scores">
+          <!-- Scoreboard icon -->
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <rect x="2" y="4" width="16" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M6 2v4M14 2v4M2 9.5h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M6 13h2M10 13h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span>Scores</span>
+        </button>
+
+        <button class="nav-item" data-route="#/standings">
+          <!-- Trophy icon -->
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M6 2h8v7a4 4 0 0 1-8 0V2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M6 5H3a2 2 0 0 0 0 4h3M14 5h3a2 2 0 0 0 0 4h-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M10 13v4M7 17h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span>Standings</span>
+        </button>
+
+        <button class="nav-item" data-route="#/stats">
+          <!-- Chart icon -->
+          <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M3 15 L7.5 9 L11.5 12 L17 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 17.5h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span>Stats</span>
+        </button>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-date" id="sidebarDate"></div>
+        <!-- Cubs W flag easter egg -->
+        <div class="w-flag" aria-hidden="true">W</div>
+      </div>
+
+    </nav>
+
+    <!-- ── Main content ── -->
+    <main class="main-content">
+      <div id="view"></div>
+    </main>
+
+  </div><!-- /.app-shell -->
+
+
+  <!-- ── Box score overlay ── -->
   <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="boxTitle">
     <div class="modal">
       <header>
@@ -56,7 +106,7 @@
     </div>
   </div>
 
-  <!-- Player card overlay -->
+  <!-- ── Player card overlay ── -->
   <div class="overlay" id="playerOverlay" role="dialog" aria-modal="true" aria-labelledby="playerTitle">
     <div class="modal" id="playerModal">
       <header>
@@ -67,7 +117,7 @@
     </div>
   </div>
 
-  <!-- Highlights overlay -->
+  <!-- ── Highlights overlay ── -->
   <div class="overlay" id="hlOverlay" role="dialog" aria-modal="true" aria-labelledby="hlTitle">
     <div class="modal">
       <header>
@@ -78,6 +128,8 @@
     </div>
   </div>
 
+
+  <!-- ── Game card template ── -->
   <template id="game-card">
     <article class="card">
       <div class="inner">
@@ -104,25 +156,26 @@
     </article>
   </template>
 
-  
+
   <script>
     (function(){
-      const titleEl = document.querySelector('.app-title');
-      if(!titleEl) return;
-      const h = new Date().getHours();
-      const msg = h < 12 ? 'Good morning, Theo' : (h < 17 ? 'Good afternoon, Theo' : 'Good evening, Theo');
-      titleEl.textContent = msg;
+      const greet  = document.querySelector('.app-greeting');
+      const dateEl = document.getElementById('sidebarDate');
+      const h      = new Date().getHours();
+      const msg    = h < 12 ? 'Good morning ☀️' : (h < 17 ? 'Good afternoon ⚾' : 'Good evening 🌙');
+      if(greet)  greet.textContent  = msg;
+      if(dateEl) dateEl.textContent = new Date().toLocaleDateString([], { weekday:'long', month:'long', day:'numeric' });
     })();
   </script>
 
   <script type="module" src="js/main.js"></script>
   <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/kids-baseball-app/sw.js').catch(console.error);
-    });
-  }
-</script>
-  
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/kids-baseball-app/sw.js').catch(console.error);
+      });
+    }
+  </script>
+
 </body>
 </html>
