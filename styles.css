@@ -128,8 +128,8 @@ html, body {
    ============================================================ */
 .app-shell {
   display: flex;
-  height: 100dvh;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background: var(--bg);
 }
@@ -1802,7 +1802,7 @@ html, body {
 /* ============================================================
    RESPONSIVE — portrait / small screen fallback
    ============================================================ */
-@media (max-width: 768px), (orientation: portrait) {
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
   .app-shell    { flex-direction: column; }
 
   .sidebar {
@@ -1823,6 +1823,7 @@ html, body {
     flex-direction: row;
     justify-content: space-around;
     padding: 6px 8px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
     width: 100%;
     gap: 0;
     background: var(--grad-sidebar);
@@ -1850,8 +1851,8 @@ html, body {
 
   .main-content {
     order: 1;
-    height: calc(100dvh - 68px);
-    height: calc(100vh - 68px);
+    height: calc(100vh - 68px - env(safe-area-inset-bottom, 0px));
+    height: calc(100dvh - 68px - env(safe-area-inset-bottom, 0px));
     padding: 14px;
   }
 
