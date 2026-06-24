@@ -9,7 +9,7 @@ export const MLB = {
   venueDetail: (id)=> `https://statsapi.mlb.com/api/v1/venues/${id}?hydrate=location,fieldInfo`,
   rosterActive: (teamId)=> `https://statsapi.mlb.com/api/v1/teams/${teamId}/roster?rosterType=active`,
   peopleStats: (ids, season)=> `https://statsapi.mlb.com/api/v1/people?personIds=${ids.join(',')}&hydrate=stats(group=[hitting,pitching],type=[season],season=${season})`,
-  headshot: (id)=> `https://img.mlbstatic.com/mlb-photos/image/upload/w_56,q_auto:best/v1/people/${id}/headshot/67/current`,
+  headshot: (id)=> `https://img.mlbstatic.com/mlb-photos/image/upload/w_180,q_auto:best/v1/people/${id}/headshot/67/current`,
   leaders: (category, season, limit=10, statGroup='')=>
     `https://statsapi.mlb.com/api/v1/stats/leaders?leaderCategories=${category}&season=${season}&limit=${limit}&sportId=1&hydrate=person,team${statGroup ? `&statGroup=${statGroup}` : ''}`,
   person: (id)=>
