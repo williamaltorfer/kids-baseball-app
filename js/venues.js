@@ -5,6 +5,40 @@ import { escapeHtml } from './utils.js';
 const SEASON = new Date().getFullYear();
 let _cache = null;
 
+// Year each team's current home park opened (keyed by stable MLB team ID)
+const YEAR_OPENED = {
+  108: 1966,  // Angels        – Angel Stadium
+  109: 1998,  // Diamondbacks  – Chase Field
+  110: 1992,  // Orioles       – Oriole Park at Camden Yards
+  111: 1912,  // Red Sox       – Fenway Park
+  112: 1914,  // Cubs          – Wrigley Field
+  113: 2003,  // Reds          – Great American Ball Park
+  114: 1994,  // Guardians     – Progressive Field
+  115: 1995,  // Rockies       – Coors Field
+  116: 2000,  // Tigers        – Comerica Park
+  117: 2000,  // Astros        – Daikin Park (fka Minute Maid)
+  118: 1973,  // Royals        – Kauffman Stadium
+  119: 1962,  // Dodgers       – Dodger Stadium
+  120: 2008,  // Nationals     – Nationals Park
+  121: 2009,  // Mets          – Citi Field
+  133: 1999,  // Athletics     – Sutter Health Park (Sacramento, temp)
+  134: 2001,  // Pirates       – PNC Park
+  135: 2004,  // Padres        – Petco Park
+  136: 1999,  // Mariners      – T-Mobile Park
+  137: 2000,  // Giants        – Oracle Park
+  138: 2006,  // Cardinals     – Busch Stadium
+  139: 1990,  // Rays          – Tropicana Field
+  140: 2020,  // Rangers       – Globe Life Field
+  141: 1989,  // Blue Jays     – Rogers Centre
+  142: 2010,  // Twins         – Target Field
+  143: 2004,  // Phillies      – Citizens Bank Park
+  144: 2017,  // Braves        – Truist Park
+  145: 1991,  // White Sox     – Guaranteed Rate Field
+  146: 2012,  // Marlins       – loanDepot park
+  147: 2009,  // Yankees       – Yankee Stadium
+  158: 2001,  // Brewers       – American Family Field
+};
+
 export async function renderVenues() {
   const view = document.getElementById('view');
   renderSkeleton(view);
@@ -37,6 +71,7 @@ async function loadAll() {
 
 function buildPage(view, items) {
   view.innerHTML = '';
+  ensureOverlayReady();
 
   let activeLeague = 'all';
   let searchQ = '';
@@ -124,15 +159,17 @@ function makeCard(team, venue) {
 
   hero.append(crest, meta);
 
-  // ── Body: stadium name + city ──
+  // ── Body: stadium name + city + year ──
   const body = document.createElement('div');
   body.className = 'vcard-body';
 
-  const city = loc.city || team.locationName || '';
+  const city  = loc.city || team.locationName || '';
   const state = loc.stateAbbrev || '';
+  const year  = YEAR_OPENED[team.id];
+  const cityLine = (year ? `Est. ${year} · ` : '') + (state ? `${city}, ${state}` : city);
 
   body.innerHTML = `<div class="vcard-stadium">${escapeHtml(venue.name || '')}</div>
-    <div class="vcard-city">${escapeHtml(state ? `${city}, ${state}` : city)}</div>`;
+    <div class="vcard-city">${escapeHtml(cityLine)}</div>`;
 
   // ── Stats: capacity | surface | roof ──
   const stats = document.createElement('div');
@@ -158,11 +195,13 @@ function makeCard(team, venue) {
   const cf = fi.center    ?? null;
   const rf = fi.rightLine ?? null;
 
-  // ── Photo: lazy-loaded from Wikipedia ──
+  // ── Photo: lazy-loaded; src stored for reuse in detail view ──
   const photo = document.createElement('div');
   photo.className = 'vcard-photo';
+  let resolvedPhotoSrc = null;
 
   fetchWikiPhoto(venue.name).then(src => {
+    resolvedPhotoSrc = src;
     if (src) {
       const img = document.createElement('img');
       img.alt = venue.name;
@@ -192,24 +231,174 @@ function makeCard(team, venue) {
     card.append(dims);
   }
 
+  card.addEventListener('click', () => openVenueDetail(team, venue, resolvedPhotoSrc));
+
   return card;
 }
 
-// ── Wikipedia photo helper ────────────────────────────────────────────────────
+// ── Venue detail overlay ──────────────────────────────────────────────────────
+
+let _overlayReady = false;
+
+function ensureOverlayReady() {
+  if (_overlayReady) return;
+  _overlayReady = true;
+
+  const overlay = document.getElementById('venueOverlay');
+  document.getElementById('venueClose').addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.style.display = 'none';
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.style.display !== 'none') {
+      overlay.style.display = 'none';
+    }
+  });
+}
+
+function openVenueDetail(team, venue, photoSrc) {
+  const overlay   = document.getElementById('venueOverlay');
+  const content   = document.getElementById('venueContent');
+  const titleEl   = document.getElementById('venueTitle');
+
+  titleEl.textContent = venue.name;
+  content.innerHTML   = '';
+  overlay.style.display = 'flex';
+
+  const fi   = venue.fieldInfo || {};
+  const loc  = venue.location  || {};
+  const city = loc.city || team.locationName || '';
+  const state = loc.stateAbbrev || '';
+
+  const year     = YEAR_OPENED[team.id];
+  const capacity = fi.capacity ? fi.capacity.toLocaleString() : '—';
+  const surface  = normalizeSurface(fi.turfType);
+  const roof     = normalizeRoof(fi.roofType);
+  const lf = fi.leftLine  ?? null;
+  const cf = fi.center    ?? null;
+  const rf = fi.rightLine ?? null;
+
+  // Photo
+  if (photoSrc) {
+    const photoDiv = document.createElement('div');
+    photoDiv.className = 'vdetail-photo';
+    const img = document.createElement('img');
+    img.src = photoSrc;
+    img.alt = venue.name;
+    photoDiv.append(img);
+    content.append(photoDiv);
+  }
+
+  // Hero: logo + team name + location
+  const detailHero = document.createElement('div');
+  detailHero.className = 'vdetail-hero';
+  const detailCrest = document.createElement('div');
+  detailCrest.className = 'crest vdetail-crest';
+  setTeamLogo(detailCrest, { teamId: team.id, id: team.abbreviation, name: team.name });
+  const teamMeta = document.createElement('div');
+  const divisionLabel = team.division?.name || team.league?.name || '';
+  const locationLabel = state ? `${city}, ${state}` : city;
+  teamMeta.innerHTML = `<div class="vdetail-team">${escapeHtml(team.name)}</div>
+    <div class="vdetail-division">${escapeHtml(divisionLabel)}${locationLabel ? ` · ${escapeHtml(locationLabel)}` : ''}</div>`;
+  detailHero.append(detailCrest, teamMeta);
+  content.append(detailHero);
+
+  // Stats row: opened | capacity | surface | roof
+  const statsDiv = document.createElement('div');
+  statsDiv.className = 'vdetail-stats';
+  [
+    { val: year ? String(year) : '—', lbl: 'Opened' },
+    { val: capacity,                  lbl: 'Capacity' },
+    { val: surface,                   lbl: 'Surface'  },
+    { val: roof,                      lbl: 'Roof'     },
+  ].forEach(({ val, lbl }) => {
+    const cell = document.createElement('div');
+    cell.className = 'vdetail-stat';
+    cell.innerHTML = `<span class="vdetail-stat-val">${escapeHtml(val)}</span><span class="vdetail-stat-lbl">${escapeHtml(lbl)}</span>`;
+    statsDiv.append(cell);
+  });
+  content.append(statsDiv);
+
+  // Field dimensions
+  if (lf !== null || cf !== null || rf !== null) {
+    const dimsDiv = document.createElement('div');
+    dimsDiv.className = 'vdetail-dims';
+    [
+      { val: lf, lbl: 'LF' },
+      { val: cf, lbl: 'CF' },
+      { val: rf, lbl: 'RF' },
+    ].forEach(({ val, lbl }) => {
+      const d = document.createElement('div');
+      d.className = 'vdetail-dim';
+      d.innerHTML = `<span class="vdetail-dim-val">${val ?? '—'}</span><span class="vdetail-dim-lbl">${lbl} ft</span>`;
+      dimsDiv.append(d);
+    });
+    content.append(dimsDiv);
+  }
+
+  // Wikipedia sections (populated asynchronously)
+  const aboutSection   = makeDetailSection('About');
+  const notableSection = makeDetailSection('Notable Events');
+  content.append(aboutSection.el, notableSection.el);
+
+  const wikiTitle = WIKI_OVERRIDES[venue.name] || venue.name.replace(/ /g, '_');
+
+  Promise.all([
+    fetchWikiExtract(wikiTitle),
+    fetchWikiNotableSection(wikiTitle),
+  ]).then(([extract, notable]) => {
+    if (extract) {
+      aboutSection.body.className = 'vdetail-section-body';
+      aboutSection.body.textContent = extract;
+    } else {
+      aboutSection.el.remove();
+    }
+
+    if (notable?.length) {
+      notableSection.body.className = 'vdetail-section-body';
+      const ul = document.createElement('ul');
+      ul.className = 'vdetail-notable-list';
+      notable.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        ul.append(li);
+      });
+      notableSection.body.append(ul);
+    } else {
+      notableSection.el.remove();
+    }
+  });
+}
+
+function makeDetailSection(title) {
+  const el = document.createElement('div');
+  el.className = 'vdetail-section';
+  const heading = document.createElement('div');
+  heading.className = 'vdetail-section-title';
+  heading.textContent = title;
+  const body = document.createElement('div');
+  body.className = 'vdetail-section-body vdetail-loading';
+  body.textContent = 'Loading…';
+  el.append(heading, body);
+  return { el, body };
+}
+
+// ── Wikipedia helpers ─────────────────────────────────────────────────────────
 
 const WIKI_OVERRIDES = {
   'loanDepot park':                   'loanDepot_Park',
-  'Rate Field':                       'Guaranteed_Rate_Field',     // MLB API truncates the name
-  'Guaranteed Rate Field':            'Guaranteed_Rate_Field',     // in case full name is returned
-  'Great American Ballpark':          'Great_American_Ball_Park',  // Wikipedia uses two words
-  'UNIQLO Field at Dodger Stadium':   'Dodger_Stadium',            // all-caps brand name
-  'Uniqlo Field at Dodger Stadium':   'Dodger_Stadium',            // alternate casing
-  'Uniqlo Field at Dodgers Stadium':  'Dodger_Stadium',            // alternate form
+  'Rate Field':                       'Guaranteed_Rate_Field',
+  'Guaranteed Rate Field':            'Guaranteed_Rate_Field',
+  'Great American Ballpark':          'Great_American_Ball_Park',
+  'UNIQLO Field at Dodger Stadium':   'Dodger_Stadium',
+  'Uniqlo Field at Dodger Stadium':   'Dodger_Stadium',
+  'Uniqlo Field at Dodgers Stadium':  'Dodger_Stadium',
 };
 
-// Direct Wikimedia image URLs for venues where the pageimages API can't find a photo
 const WIKI_DIRECT_IMAGES = {
-  'Rate Field':          'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Chicago%2C_Illinois%2C_U.S._%282023%29_-_062.jpg/960px-Chicago%2C_Illinois%2C_U.S._%282023%29_-_062.jpg',
+  'Rate Field':            'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Chicago%2C_Illinois%2C_U.S._%282023%29_-_062.jpg/960px-Chicago%2C_Illinois%2C_U.S._%282023%29_-_062.jpg',
   'Guaranteed Rate Field': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Chicago%2C_Illinois%2C_U.S._%282023%29_-_062.jpg/960px-Chicago%2C_Illinois%2C_U.S._%282023%29_-_062.jpg',
 };
 
@@ -221,6 +410,45 @@ async function fetchWikiPhoto(venueName) {
     const data = await fetchJSON(url);
     const page = Object.values(data?.query?.pages || {})[0];
     return page?.thumbnail?.source ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchWikiExtract(wikiTitle) {
+  try {
+    const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(wikiTitle)}&prop=extracts&exintro=1&explaintext=1&format=json&origin=*`;
+    const data = await fetchJSON(url);
+    const page = Object.values(data?.query?.pages || {})[0];
+    return page?.extract?.trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchWikiNotableSection(wikiTitle) {
+  try {
+    const sectionsUrl = `https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(wikiTitle)}&prop=sections&format=json&origin=*`;
+    const sectionsData = await fetchJSON(sectionsUrl);
+    const sections = sectionsData?.parse?.sections || [];
+
+    const target = sections.find(s => /notable|event|record/i.test(s.line));
+    if (!target) return null;
+
+    const textUrl = `https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(wikiTitle)}&section=${target.index}&prop=text&format=json&origin=*`;
+    const textData = await fetchJSON(textUrl);
+    const html = textData?.parse?.text?.['*'] ?? '';
+
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    tmp.querySelectorAll('sup, .reference, .mw-editsection, .reflist').forEach(el => el.remove());
+
+    const items = Array.from(tmp.querySelectorAll('li'))
+      .map(li => li.textContent.replace(/\[\d+\]/g, '').trim())
+      .filter(t => t.length > 20)
+      .slice(0, 10);
+
+    return items.length ? items : null;
   } catch {
     return null;
   }
