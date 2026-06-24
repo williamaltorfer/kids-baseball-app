@@ -345,10 +345,16 @@ function openVenueDetail(team, venue, photoSrc) {
 
   const wikiTitle = WIKI_OVERRIDES[venue.name] || venue.name.replace(/ /g, '_');
 
-  Promise.all([
-    fetchWikiExtract(wikiTitle),
-    fetchWikiNotableSection(wikiTitle),
-  ]).then(([extract, notable]) => {
+  const wikiPromise = _wikiCache.has(wikiTitle)
+    ? Promise.resolve(_wikiCache.get(wikiTitle))
+    : Promise.all([fetchWikiExtract(wikiTitle), fetchWikiNotableSection(wikiTitle)])
+        .then(([extract, notable]) => {
+          const result = { extract, notable };
+          _wikiCache.set(wikiTitle, result);
+          return result;
+        });
+
+  wikiPromise.then(({ extract, notable }) => {
     if (extract) {
       aboutSection.body.className = 'vdetail-section-body';
       aboutSection.body.textContent = extract;
@@ -426,6 +432,8 @@ async function fetchWikiExtract(wikiTitle) {
   }
 }
 
+const _wikiCache = new Map();
+
 async function fetchWikiNotableSection(wikiTitle) {
   try {
     const sectionsUrl = `https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(wikiTitle)}&prop=sections&format=json&origin=*`;
@@ -441,9 +449,11 @@ async function fetchWikiNotableSection(wikiTitle) {
 
     const tmp = document.createElement('div');
     tmp.innerHTML = html;
-    tmp.querySelectorAll('sup, .reference, .mw-editsection, .reflist').forEach(el => el.remove());
+    // Remove style blocks, reference lists, footnotes, and edit-section links
+    tmp.querySelectorAll('style, sup, .reference, .mw-editsection, .reflist, .references, ol.references, .mw-references-wrap').forEach(el => el.remove());
 
-    const items = Array.from(tmp.querySelectorAll('li'))
+    // Only unordered list items — reference footnotes live in <ol>, not <ul>
+    const items = Array.from(tmp.querySelectorAll('ul > li'))
       .map(li => li.textContent.replace(/\[\d+\]/g, '').trim())
       .filter(t => t.length > 20)
       .slice(0, 10);
