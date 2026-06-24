@@ -2,7 +2,7 @@
 // Scope: /kids-baseball-app/
 
 const APP_PATH = '/kids-baseball-app';
-const CACHE_NAME = 'theo-ball-static-v1';
+const CACHE_NAME = 'theo-ball-static-v3';
 
 // List the core files to precache. Update this list (and bump CACHE_NAME) when you add/change files.
 const ASSETS = [
@@ -10,13 +10,19 @@ const ASSETS = [
   `${APP_PATH}/index.html`,
   `${APP_PATH}/styles.css`,
   `${APP_PATH}/manifest.webmanifest`,
-  // JS entry points
+  // JS modules
   `${APP_PATH}/js/main.js`,
-  `${APP_PATH}/js/components.js`,
   `${APP_PATH}/js/api.js`,
   `${APP_PATH}/js/utils.js`,
+  `${APP_PATH}/js/components.js`,
+  `${APP_PATH}/js/scores.js`,
+  `${APP_PATH}/js/standings.js`,
+  `${APP_PATH}/js/team.js`,
+  `${APP_PATH}/js/highlights.js`,
+  `${APP_PATH}/js/media.js`,
   // Icons
   `${APP_PATH}/icons/icon.png`,
+  `${APP_PATH}/assets/Logo.png`,
 ];
 
 // ----- Install: pre-cache core assets
