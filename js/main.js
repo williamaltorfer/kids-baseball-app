@@ -2,11 +2,13 @@ import { $, $$, toDateKey } from './utils.js';
 import { renderScores } from './scores.js';
 import { renderStandings } from './standings.js';
 import { renderTeam } from './team.js';
+import { renderStats } from './stats.js';
 
 // Simple router
 const routes = {
-  '#/scores': (state) => renderScores(state),
-  '#/standings': (state) => renderStandings(state)
+  '#/scores':   (state) => renderScores(state),
+  '#/standings':(state) => renderStandings(state),
+  '#/stats':    (state) => renderStats(state),
 };
 
 function setActiveTab(){
