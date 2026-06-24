@@ -57,10 +57,12 @@ async function getRecentBattingOrder(teamId){
 export async function renderTeam(teamId){
   const view = document.getElementById('view'); view.innerHTML = '';
   const back = btnIcon('⬅ Back to Standings'); back.onclick = ()=>{ location.hash = '#/standings'; };
+  const pageHeader = document.createElement('div'); pageHeader.className='team-page-header';
   const header = document.createElement('div'); header.className='team-header';
   const crest = document.createElement('div'); crest.className='crest'; header.append(crest);
-  const title = document.createElement('div'); title.className='app-title'; title.style.fontSize='24px'; title.textContent = 'Loading team...'; header.append(title);
-  view.append(back, header);
+  const title = document.createElement('div'); title.className='app-title'; title.textContent = 'Loading team...'; header.append(title);
+  pageHeader.append(back, header);
+  view.append(pageHeader);
 
   try{
     const [teamMeta, roster] = await Promise.all([

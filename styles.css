@@ -43,14 +43,14 @@
 
   /* ── Text ── */
   --text-1: #F0F4FF;
-  --text-2: rgba(240,244,255,.55);
-  --text-3: rgba(240,244,255,.30);
+  --text-2: rgba(240,244,255,.72);
+  --text-3: rgba(240,244,255,.48);
 
   /* ── Sidebar panel ── */
   --side-bg:     #060B11;
   --side-text-1: #F0F4FF;
-  --side-text-2: rgba(240,244,255,.55);
-  --side-text-3: rgba(240,244,255,.25);
+  --side-text-2: rgba(240,244,255,.72);
+  --side-text-3: rgba(240,244,255,.42);
 
   /* ── Type ── */
   --display: 'Barlow Condensed', ui-sans-serif, system-ui, sans-serif;
@@ -908,11 +908,20 @@ html, body {
 /* ============================================================
    TEAM PAGE
    ============================================================ */
+/* Team page top bar — back button + logo + name on one row */
+.team-page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
 .team-header {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin: 4px 0 20px;
+  flex: 1;
+  min-width: 0;
 }
 
 .team-header .crest {
