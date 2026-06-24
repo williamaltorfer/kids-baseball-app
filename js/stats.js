@@ -9,7 +9,8 @@ const SEASON = new Date().getFullYear();
 const HITTING = [
   {
     key: 'battingAverage', label: 'Batting Average', abbr: 'AVG', fmt: v => v, statGroup: 'hitting',
-    info: 'How often a batter gets a hit. Divide hits by at-bats. A .300 average means getting a hit 3 out of every 10 trips to the plate — that\'s really good!'
+    info: 'How often a batter gets a hit. Divide hits by at-bats. A .300 average means getting a hit 3 out of every 10 trips to the plate — that\'s really good!',
+    video: 'https://www.youtube.com/embed/h4eVGs8Gbaw'
   },
   {
     key: 'homeRuns', label: 'Home Runs', abbr: 'HR', fmt: v => v, statGroup: 'hitting',
@@ -190,6 +191,17 @@ function makeLeaderCard(def, data) {
   drawerText.className = 'stat-info-text';
   drawerText.textContent = def.info;
   drawer.append(drawerText);
+  if (def.video) {
+    const videoWrap = document.createElement('div');
+    videoWrap.className = 'stat-video-wrap';
+    const iframe = document.createElement('iframe');
+    iframe.src = def.video;
+    iframe.title = `${def.label} explainer video`;
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    videoWrap.append(iframe);
+    drawer.append(videoWrap);
+  }
   card.append(drawer);
 
   infoBtn.addEventListener('click', (e) => {
