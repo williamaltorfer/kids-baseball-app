@@ -158,7 +158,23 @@ function makeCard(team, venue) {
   const cf = fi.center    ?? null;
   const rf = fi.rightLine ?? null;
 
-  card.append(hero, body, stats);
+  // ── Photo: lazy-loaded from Wikipedia ──
+  const photo = document.createElement('div');
+  photo.className = 'vcard-photo';
+
+  fetchWikiPhoto(venue.name).then(src => {
+    if (src) {
+      const img = document.createElement('img');
+      img.alt = venue.name;
+      img.src = src;
+      img.onerror = () => photo.remove();
+      photo.append(img);
+    } else {
+      photo.remove();
+    }
+  });
+
+  card.append(hero, photo, body, stats);
 
   if (lf !== null || cf !== null || rf !== null) {
     const dims = document.createElement('div');
@@ -177,6 +193,26 @@ function makeCard(team, venue) {
   }
 
   return card;
+}
+
+// ── Wikipedia photo helper ────────────────────────────────────────────────────
+
+const WIKI_OVERRIDES = {
+  'loanDepot park': 'loanDepot_Park',
+};
+
+async function fetchWikiPhoto(venueName) {
+  const title = WIKI_OVERRIDES[venueName] || venueName.replace(/ /g, '_');
+  try {
+    const data = await fetchJSON(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`
+    );
+    const raw = data.originalimage?.source || data.thumbnail?.source;
+    if (!raw) return null;
+    return raw.includes('/thumb/') ? raw.replace(/\/\d+px-/, '/800px-') : raw;
+  } catch {
+    return null;
+  }
 }
 
 function normalizeSurface(s) {

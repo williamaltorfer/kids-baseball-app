@@ -1169,6 +1169,21 @@ html, body {
   margin-top: 2px;
 }
 
+.vcard-photo {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--surface-3);
+  overflow: hidden;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.vcard-photo:has(img) { animation: none; }
+.vcard-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .vcard-body {
   padding: 12px 14px 0;
 }
