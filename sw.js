@@ -2,7 +2,7 @@
 // Scope: /kids-baseball-app/
 
 const APP_PATH = '/kids-baseball-app';
-const CACHE_NAME = 'theo-ball-static-v7';
+const CACHE_NAME = 'theo-ball-static-v8';
 
 // List the core files to precache. Update this list (and bump CACHE_NAME) when you add/change files.
 const ASSETS = [
@@ -26,6 +26,7 @@ const ASSETS = [
   `${APP_PATH}/js/venues.js`,
   // Icons
   `${APP_PATH}/icons/icon.png`,
+  `${APP_PATH}/icons/flaming-baseball.png`,
   `${APP_PATH}/assets/Logo.png`,
 ];
 
