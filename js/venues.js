@@ -364,6 +364,7 @@ function openVenueDetail(team, venue, photoSrc) {
 
     if (notable?.length) {
       notableSection.body.className = 'vdetail-section-body';
+      notableSection.body.textContent = '';
       const ul = document.createElement('ul');
       ul.className = 'vdetail-notable-list';
       notable.forEach(item => {
