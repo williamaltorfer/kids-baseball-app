@@ -37,7 +37,8 @@ const HITTING = [
 const PITCHING = [
   {
     key: 'earnedRunAverage', label: 'ERA', abbr: 'ERA', fmt: v => v, statGroup: 'pitching',
-    info: 'Earned Run Average — the average number of runs a pitcher allows over 9 innings. Lower is better. Below 3.00 is excellent; the best pitchers are below 2.00!'
+    info: 'Earned Run Average — the average number of runs a pitcher allows over 9 innings. Lower is better. Below 3.00 is excellent; the best pitchers are below 2.00!',
+    video: 'https://www.youtube.com/embed/rzZhjRnjlYQ'
   },
   {
     key: 'strikeouts', label: 'Strikeouts', abbr: 'SO', fmt: v => v, statGroup: 'pitching',

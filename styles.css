@@ -1806,6 +1806,10 @@ html, body {
   .app-shell    { flex-direction: column; }
 
   .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     height: auto;
     flex-direction: row;
@@ -1813,6 +1817,7 @@ html, body {
     border-right: none;
     border-top: none;
     box-shadow: 0 -2px 16px rgba(244,132,95,.15);
+    z-index: 100;
   }
 
   .sidebar::before { display: none; }
@@ -1851,9 +1856,9 @@ html, body {
 
   .main-content {
     order: 1;
-    height: calc(100vh - 68px - env(safe-area-inset-bottom, 0px));
-    height: calc(100dvh - 68px - env(safe-area-inset-bottom, 0px));
-    padding: calc(env(safe-area-inset-top, 0px) + 14px) 14px 14px;
+    height: 100vh;
+    height: 100dvh;
+    padding: calc(env(safe-area-inset-top, 0px) + 14px) 14px calc(68px + env(safe-area-inset-bottom, 0px) + 14px);
   }
 
   .grid          { grid-template-columns: 1fr; }
