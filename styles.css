@@ -1853,7 +1853,7 @@ html, body {
     order: 1;
     height: calc(100vh - 68px - env(safe-area-inset-bottom, 0px));
     height: calc(100dvh - 68px - env(safe-area-inset-bottom, 0px));
-    padding: 14px;
+    padding: calc(env(safe-area-inset-top, 0px) + 14px) 14px 14px;
   }
 
   .grid          { grid-template-columns: 1fr; }

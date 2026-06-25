@@ -2,7 +2,7 @@
 // Scope: /kids-baseball-app/
 
 const APP_PATH = '/kids-baseball-app';
-const CACHE_NAME = 'theo-ball-static-v9';
+const CACHE_NAME = 'theo-ball-static-v10';
 
 // List the core files to precache. Update this list (and bump CACHE_NAME) when you add/change files.
 const ASSETS = [
