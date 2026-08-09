@@ -98,14 +98,57 @@ function buildPage(view, items) {
   searchInput.type = 'search';
   searchInput.className = 'venues-search';
   searchInput.placeholder = 'Search team or ballpark…';
+  searchInput.autocomplete = 'off';
+
+  const suggestions = document.createElement('div');
+  suggestions.className = 'venues-suggestions';
+  suggestions.style.display = 'none';
+
+  function hideSuggestions(){ suggestions.style.display = 'none'; suggestions.innerHTML = ''; }
+
+  function showSuggestions(query){
+    if(!query){ hideSuggestions(); return; }
+    const matches = items.filter(({ team, venue }) => {
+      const hay = `${team.name} ${venue?.name || ''}`.toLowerCase();
+      return hay.includes(query);
+    }).slice(0, 6);
+
+    if(!matches.length){ hideSuggestions(); return; }
+
+    suggestions.innerHTML = '';
+    matches.forEach(({ team, venue }) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'venues-suggestion';
+      btn.innerHTML = `${escapeHtml(team.name)}<span class="sugg-sub"> — ${escapeHtml(venue?.name || '')}</span>`;
+      btn.addEventListener('mousedown', (e) => {
+        // mousedown (not click) so this fires before the input's blur handler hides the list
+        e.preventDefault();
+        searchInput.value = team.name;
+        searchQ = team.name.toLowerCase().trim();
+        hideSuggestions();
+        renderGrid();
+      });
+      suggestions.append(btn);
+    });
+    suggestions.style.display = 'block';
+  }
+
   searchInput.addEventListener('input', () => {
     searchQ = searchInput.value.toLowerCase().trim();
+    showSuggestions(searchQ);
     renderGrid();
   });
+  searchInput.addEventListener('focus', () => showSuggestions(searchQ));
+  searchInput.addEventListener('blur', () => hideSuggestions());
+
+  const searchWrap = document.createElement('div');
+  searchWrap.className = 'venues-search-wrap';
+  searchWrap.append(searchInput, suggestions);
 
   const controls = document.createElement('div');
   controls.className = 'venues-controls';
-  controls.append(seg, searchInput);
+  controls.append(seg, searchWrap);
 
   const grid = document.createElement('div');
   grid.className = 'venues-grid';
