@@ -1418,9 +1418,14 @@ html, body {
 
 .venues-controls .seg { margin-bottom: 0; }
 
-.venues-search {
+.venues-search-wrap {
+  position: relative;
   flex: 1;
   min-width: 200px;
+}
+
+.venues-search {
+  width: 100%;
   height: 40px;
   padding: 0 16px;
   border: 1.5px solid var(--border-s);
@@ -1441,6 +1446,41 @@ html, body {
 }
 
 .venues-search::placeholder { color: var(--text-3); }
+
+.venues-suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1.5px solid var(--border-s);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-lg);
+  overflow: hidden;
+  z-index: 20;
+}
+
+.venues-suggestion {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  border: none;
+  background: var(--surface);
+  color: var(--text-1);
+  font-family: var(--body);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.venues-suggestion:hover,
+.venues-suggestion:focus {
+  background: var(--surface-2);
+}
+
+.venues-suggestion + .venues-suggestion { border-top: 1px solid var(--border); }
+
+.venues-suggestion .sugg-sub { color: var(--text-3); font-size: 12px; }
 
 .venues-grid {
   display: grid;
@@ -1822,7 +1862,6 @@ html, body {
     border-right: none;
     border-top: none;
     box-shadow: 0 -2px 16px rgba(244,132,95,.15);
-    padding-bottom: max(env(safe-area-inset-bottom, 0px), 24px);
     z-index: 100;
   }
 
@@ -1834,6 +1873,7 @@ html, body {
     flex-direction: row;
     justify-content: space-around;
     padding: 6px 8px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
     width: 100%;
     gap: 0;
     background: var(--grad-sidebar);
@@ -1863,12 +1903,13 @@ html, body {
     order: 1;
     height: 100vh;
     height: 100dvh;
-    padding: calc(env(safe-area-inset-top, 0px) + 14px) 14px calc(68px + max(env(safe-area-inset-bottom, 0px), 24px) + 14px);
+    padding: calc(env(safe-area-inset-top, 0px) + 14px) 14px calc(68px + env(safe-area-inset-bottom, 0px) + 14px);
   }
 
   .grid          { grid-template-columns: 1fr; }
   .stats-grid    { grid-template-columns: 1fr; }
   .venues-grid   { grid-template-columns: 1fr; }
   .venues-controls { flex-direction: column; align-items: stretch; }
-  .venues-search { min-width: unset; }
+  .venues-search-wrap { min-width: unset; }
+  .venues-search { height: 46px; font-size: 16px; }
 }
