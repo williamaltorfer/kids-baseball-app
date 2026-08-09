@@ -291,7 +291,6 @@ html, body {
   flex: 1;
   overflow-y: auto;
   overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
   padding: 20px 24px;
   background: var(--bg);
   min-width: 0;
@@ -1823,7 +1822,7 @@ html, body {
     border-right: none;
     border-top: none;
     box-shadow: 0 -2px 16px rgba(244,132,95,.15);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 24px);
     z-index: 100;
   }
 
@@ -1864,7 +1863,7 @@ html, body {
     order: 1;
     height: 100vh;
     height: 100dvh;
-    padding: calc(env(safe-area-inset-top, 0px) + 14px) 14px calc(68px + env(safe-area-inset-bottom, 0px) + 14px);
+    padding: calc(env(safe-area-inset-top, 0px) + 14px) 14px calc(68px + max(env(safe-area-inset-bottom, 0px), 24px) + 14px);
   }
 
   .grid          { grid-template-columns: 1fr; }
