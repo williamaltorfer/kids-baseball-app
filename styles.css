@@ -709,14 +709,18 @@ html, body {
   background: var(--surface);
   color: var(--text-2);
   font-family: var(--body);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
-  border-radius: var(--r-sm);
-  padding: 7px 14px;
-  min-height: 36px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   cursor: pointer;
   transition: background .12s, color .12s, border-color .12s;
-  letter-spacing: .2px;
 }
 
 .close:hover  { background: var(--surface-3); color: var(--text-1); border-color: var(--coral); }
@@ -781,7 +785,9 @@ html, body {
 
 .num { text-align: right !important; font-variant-numeric: tabular-nums; }
 
-.table.box { table-layout: fixed; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.table.box { table-layout: fixed; min-width: 480px; }
 .table.box colgroup col:nth-child(1)   { width: 34%; }
 .table.box colgroup col:nth-child(2)   { width: 8%; }
 .table.box colgroup col:nth-child(n+3) { width: calc(58% / 8); }
@@ -881,7 +887,7 @@ html, body {
   border-bottom: 1px solid var(--border);
 }
 
-.stand-table { width: 100%; border-collapse: collapse; }
+.stand-table { width: 100%; min-width: 420px; border-collapse: collapse; }
 
 .stand-table th {
   background: var(--surface-2);
@@ -1817,6 +1823,7 @@ html, body {
     border-right: none;
     border-top: none;
     box-shadow: 0 -2px 16px rgba(244,132,95,.15);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
     z-index: 100;
   }
 
@@ -1828,7 +1835,6 @@ html, body {
     flex-direction: row;
     justify-content: space-around;
     padding: 6px 8px;
-    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
     width: 100%;
     gap: 0;
     background: var(--grad-sidebar);
