@@ -136,5 +136,7 @@ function makeStandTable(rows, groupLabel, showRank=false){
     if(crest){ setTeamLogo(crest, {name:'', id:'', teamId}); }
     tr.querySelector('.stand-team')?.addEventListener('click', ()=>{ location.hash = `#/team/${teamId}`; });
   });
-  return table;
+  const scroll = document.createElement('div'); scroll.className = 'table-scroll';
+  scroll.append(table);
+  return scroll;
 }

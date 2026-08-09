@@ -243,7 +243,8 @@ function battingSubcard(title, rows){
     const tr = e.target.closest('tr[data-person-id]');
     if(tr?.dataset.personId) openPlayerCard(Number(tr.dataset.personId));
   });
-  body.append(table); card.append(body); return card;
+  const scroll = document.createElement('div'); scroll.className = 'table-scroll';
+  scroll.append(table); body.append(scroll); card.append(body); return card;
 }
 
 function pitchingSubcard(title, rows){
@@ -287,7 +288,8 @@ function pitchingSubcard(title, rows){
     const tr = e.target.closest('tr[data-person-id]');
     if(tr?.dataset.personId) openPlayerCard(Number(tr.dataset.personId));
   });
-  body.append(table); card.append(body); return card;
+  const scroll = document.createElement('div'); scroll.className = 'table-scroll';
+  scroll.append(table); body.append(scroll); card.append(body); return card;
 }
 
 // appearance filters + derivations

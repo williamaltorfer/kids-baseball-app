@@ -9,12 +9,23 @@ export function pickPlayback(playbacks){
   return playbacks[0]?.url || null;
 }
 
+// MLB publishes dedicated translated highlight reels (e.g. "Japanese Highlights: Blue Jays-Phillies")
+// alongside the English recap. Their headline/title always leads with the language name, unlike
+// ordinary English clips which are also taxonomy-tagged for a language (international licensing)
+// without actually being dubbed/translated.
+const FOREIGN_HIGHLIGHT_REEL = /^(japanese|spanish|korean|chinese|portuguese)\s+highlights\b/i;
+
+function isNonEnglish(item){
+  return FOREIGN_HIGHLIGHT_REEL.test(item.headline || '') || FOREIGN_HIGHLIGHT_REEL.test(item.title || '');
+}
+
 export function findRecapFromContent(data){
   const buckets = [];
   if(data?.highlights?.highlights?.items) buckets.push(...data.highlights.highlights.items);
   if(data?.highlights?.live?.items) buckets.push(...data.highlights.live.items);
   if(data?.editorial?.recap?.mlb?.items) buckets.push(...data.editorial.recap.mlb.items);
-  const ranked = buckets.sort((a,b)=>{
+  const english = buckets.filter(item => !isNonEnglish(item));
+  const ranked = english.sort((a,b)=>{
     const ah = (a.headline||'').toLowerCase();
     const bh = (b.headline||'').toLowerCase();
     const ascore = (ah.includes('recap')?2:0) + (ah.includes('highlight')?1:0);
