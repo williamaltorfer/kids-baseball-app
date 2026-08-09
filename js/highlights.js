@@ -1,5 +1,18 @@
 import { pickPlayback, findRecapFromContent } from './media.js';
 
+export function closeHighlights(){
+  const overlay = document.getElementById('hlOverlay');
+  const body = document.getElementById('hlContent');
+  const video = body.querySelector('video');
+  if(video){
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+  }
+  body.innerHTML = '';
+  overlay.style.display = 'none';
+}
+
 export function openHighlights(recap, gameTitle){
   const overlay = document.getElementById('hlOverlay');
   const body = document.getElementById('hlContent');

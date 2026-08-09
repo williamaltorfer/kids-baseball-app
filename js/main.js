@@ -4,6 +4,7 @@ import { renderStandings } from './standings.js';
 import { renderTeam } from './team.js';
 import { renderStats } from './stats.js';
 import { renderVenues } from './venues.js';
+import { closeHighlights } from './highlights.js';
 
 // Simple router
 const routes = {
@@ -36,8 +37,8 @@ $$('.nav-item').forEach(btn => btn.addEventListener('click', ()=>{ location.hash
 document.getElementById('boxClose').addEventListener('click', ()=> document.getElementById('overlay').style.display='none');
 document.getElementById('overlay').addEventListener('click', (e)=>{ if(e.target.id==='overlay') document.getElementById('overlay').style.display='none'; });
 
-document.getElementById('hlClose').addEventListener('click', ()=> document.getElementById('hlOverlay').style.display='none');
-document.getElementById('hlOverlay').addEventListener('click', (e)=>{ if(e.target.id==='hlOverlay') document.getElementById('hlOverlay').style.display='none'; });
+document.getElementById('hlClose').addEventListener('click', closeHighlights);
+document.getElementById('hlOverlay').addEventListener('click', (e)=>{ if(e.target.id==='hlOverlay') closeHighlights(); });
 
 document.getElementById('playerClose').addEventListener('click', ()=> document.getElementById('playerOverlay').style.display='none');
 document.getElementById('playerOverlay').addEventListener('click', (e)=>{ if(e.target.id==='playerOverlay') document.getElementById('playerOverlay').style.display='none'; });
