@@ -14,6 +14,17 @@ python -m http.server 8080
 
 On iPad, use any “local web server” app (or Shortcuts that launches a local server) and point it at this folder.
 
+## Install on iOS (iPhone/iPad)
+The app is a PWA hosted at https://williamaltorfer.github.io/kids-baseball-app/. Installing it as a home screen app gives a full-screen, standalone experience without Safari's browser chrome.
+
+1. Open **Safari** and go to https://williamaltorfer.github.io/kids-baseball-app/ (must be Safari — other browsers can't install standalone PWAs on iOS).
+2. Tap the **Share** icon (square with an arrow pointing up).
+3. Scroll down and tap **Add to Home Screen**.
+4. Confirm the name and tap **Add**.
+5. Launch the app from its home screen icon (not from Safari) so it opens in standalone mode.
+
+If you update the app and don't see the changes reflected, force-quit it (swipe up from the app switcher) and reopen — the service worker checks for updates on launch, but standalone PWAs don't reliably refresh in the background.
+
 ## Files
 - `index.html` — layout, header, overlays, and the game card template
 - `styles.css` — all styles
