@@ -56,7 +56,7 @@ async function getRecentBattingOrder(teamId){
 
 export async function renderTeam(teamId){
   const view = document.getElementById('view'); view.innerHTML = '';
-  const back = btnIcon('⬅ Back to Standings'); back.onclick = ()=>{ location.hash = '#/standings'; };
+  const back = btnIcon('←'); back.className='iconbtn square'; back.setAttribute('aria-label','Back to standings'); back.onclick = ()=>{ location.hash = '#/standings'; };
   const pageHeader = document.createElement('div'); pageHeader.className='team-page-header';
   const header = document.createElement('div'); header.className='team-header';
   const crest = document.createElement('div'); crest.className='crest'; header.append(crest);
@@ -151,13 +151,13 @@ export async function renderTeam(teamId){
 }
 
 function rosterTableHitters(label, rows, orderMap={}, lineupDate=''){
-  const wrap = document.createElement('div');
+  const wrap = document.createElement('div'); wrap.className='table-scroll';
   const table = document.createElement('table'); table.className='table team-fixed hitters';
   table.innerHTML = `
     <colgroup>
-      <col style="width:52%" /><!-- Player -->
-      <col style="width:8%" /><!-- Pos -->
-      <col style="width:6.666%" /><col style="width:6.666%" /><col style="width:6.666%" /><col style="width:6.666%" /><col style="width:6.666%" /><col style="width:6.666%" />
+      <col style="width:160px" /><!-- Player -->
+      <col style="width:44px" /><!-- Pos -->
+      <col style="width:44px" /><col style="width:48px" /><col style="width:44px" /><col style="width:44px" /><col style="width:44px" /><col style="width:56px" />
     </colgroup>
     <thead>
       <tr><th colspan='8' style='text-align:left;'>${escapeHtml(label)}${lineupDate ? ` <span class='subhead'>(from ${escapeHtml(lineupDate)})</span>` : ''}</th></tr>
@@ -184,12 +184,12 @@ function rosterTableHitters(label, rows, orderMap={}, lineupDate=''){
 }
 
 function rosterTablePitchers(label, rows){
-  const wrap = document.createElement('div');
+  const wrap = document.createElement('div'); wrap.className='table-scroll';
   const table = document.createElement('table'); table.className='table team-fixed pitchers';
   table.innerHTML = `
     <colgroup>
-      <col style="width:44%" /><!-- Player -->
-      <col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" /><col style="width:6.222%" />
+      <col style="width:160px" /><!-- Player -->
+      <col style="width:36px" /><col style="width:36px" /><col style="width:48px" /><col style="width:36px" /><col style="width:36px" /><col style="width:36px" /><col style="width:36px" /><col style="width:36px" /><col style="width:48px" />
     </colgroup>
     <thead>
       <tr><th colspan='10' style='text-align:left;'>${escapeHtml(label)}</th></tr>
