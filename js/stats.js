@@ -89,16 +89,27 @@ const SEGMENTS = [
 
 // ── Main render ───────────────────────────────────────────────────────────────
 
+const MODES = [
+  { id: 'season', label: `${SEASON} Season` },
+  { id: 'career', label: 'All-Time' },
+];
+
 export async function renderStats(state) {
   const view = document.getElementById('view');
   view.innerHTML = '';
 
-  // Segmented control
+  // Segmented control — stat category (Hitting / Pitching / Fun)
   const seg = document.createElement('div');
   seg.className = 'seg';
   seg.style.cssText = 'display:inline-flex;margin-bottom:16px;';
 
+  // Segmented control — Season vs. All-Time
+  const modeSeg = document.createElement('div');
+  modeSeg.className = 'seg';
+  modeSeg.style.cssText = 'display:inline-flex;margin-bottom:16px;margin-left:10px;';
+
   let activeSegId = state.statsSegment || 'hitting';
+  let activeMode = state.statsMode || 'season';
 
   const segGrid = document.createElement('div');
   segGrid.className = 'stats-grid';
@@ -113,15 +124,34 @@ export async function renderStats(state) {
       activeSegId = id;
       state.statsSegment = id;
       seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.seg === id ? 'true' : 'false'));
-      loadSegment(id);
+      loadSegment(activeSegId, activeMode);
     });
     seg.append(btn);
   });
 
-  view.append(seg, segGrid);
+  MODES.forEach(({ id, label }) => {
+    const btn = document.createElement('button');
+    btn.textContent = label;
+    btn.dataset.mode = id;
+    btn.setAttribute('aria-pressed', id === activeMode ? 'true' : 'false');
+    btn.addEventListener('click', () => {
+      if (id === activeMode) return;
+      activeMode = id;
+      state.statsMode = id;
+      modeSeg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === id ? 'true' : 'false'));
+      loadSegment(activeSegId, activeMode);
+    });
+    modeSeg.append(btn);
+  });
 
-  async function loadSegment(segId) {
+  const controls = document.createElement('div');
+  controls.style.cssText = 'display:flex;flex-wrap:wrap;';
+  controls.append(seg, modeSeg);
+  view.append(controls, segGrid);
+
+  async function loadSegment(segId, mode) {
     const { defs } = SEGMENTS.find(s => s.id === segId);
+    const career = mode === 'career';
     segGrid.innerHTML = '';
 
     // Skeleton cards while loading
@@ -134,7 +164,7 @@ export async function renderStats(state) {
 
     // Fire all leader requests in parallel
     const results = await Promise.allSettled(
-      defs.map(d => getLeaders(d.key, SEASON, 10, d.statGroup || '').then(data => ({ def: d, data })))
+      defs.map(d => getLeaders(d.key, SEASON, 10, d.statGroup || '', career).then(data => ({ def: d, data })))
     );
 
     segGrid.innerHTML = '';
@@ -148,7 +178,7 @@ export async function renderStats(state) {
     });
   }
 
-  loadSegment(activeSegId);
+  loadSegment(activeSegId, activeMode);
 }
 
 // ── Leader card ───────────────────────────────────────────────────────────────
