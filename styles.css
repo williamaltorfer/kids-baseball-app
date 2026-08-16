@@ -130,6 +130,7 @@ html, body {
   display: flex;
   height: 100vh;
   height: 100dvh;
+  height: calc(var(--vh, 1vh) * 100);
   overflow: hidden;
   background: var(--bg);
 }
@@ -967,6 +968,8 @@ html, body {
   margin-bottom: 20px;
 }
 
+.team-page-header .iconbtn.square { flex-shrink: 0; }
+
 .team-header {
   display: flex;
   align-items: center;
@@ -978,6 +981,7 @@ html, body {
 .team-header .crest {
   width: 60px;
   height: 60px;
+  flex-shrink: 0;
   border-radius: var(--r-lg);
   background: var(--crest-bg);
   padding: 6px;
@@ -986,22 +990,23 @@ html, body {
 }
 
 .team-header .app-title {
+  flex: 1;
+  min-width: 0;
   color: var(--text-1);
   font-family: var(--display);
-  font-size: 34px;
+  font-size: clamp(20px, 6.5vw, 34px);
   font-weight: 900;
   letter-spacing: .5px;
   text-transform: uppercase;
+  line-height: 1.1;
+  overflow-wrap: break-word;
+  text-align: right;
 }
 
 .team-section { margin: 0 12px 12px; }
-.team-fixed   { table-layout: fixed; }
-
-.hitters colgroup col:nth-child(1)   { width: 44%; }
-.hitters colgroup col:nth-child(n+2) { width: calc(56% / 7); }
-
-.pitchers colgroup col:nth-child(1)   { width: 38%; }
-.pitchers colgroup col:nth-child(n+2) { width: calc(62% / 9); }
+.team-fixed   { table-layout: fixed; width: auto; }
+.team-fixed.hitters  { min-width: 484px; }
+.team-fixed.pitchers { min-width: 508px; }
 
 /* ============================================================
    PLAYER CARD MODAL
@@ -1903,6 +1908,7 @@ html, body {
     order: 1;
     height: 100vh;
     height: 100dvh;
+    height: calc(var(--vh, 1vh) * 100);
     padding: calc(env(safe-area-inset-top, 0px) + 14px) 14px calc(68px + env(safe-area-inset-bottom, 0px) + 14px);
   }
 

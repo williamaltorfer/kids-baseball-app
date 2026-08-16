@@ -46,3 +46,16 @@ document.getElementById('playerOverlay').addEventListener('click', (e)=>{ if(e.t
 setActiveTab();
 window.addEventListener('hashchange', ()=>{ setActiveTab(); render(); });
 render();
+
+// iOS Safari reports 100vh/100dvh using the address-bar-expanded viewport at
+// first paint, then repaints late once it collapses — this leaves a stale
+// gap that only resolves on the first scroll/resize. Track the real visual
+// viewport height ourselves so the shell is correct from the first frame.
+function setViewportHeight(){
+  const h = window.visualViewport?.height || window.innerHeight;
+  document.documentElement.style.setProperty('--vh', `${h * 0.01}px`);
+}
+setViewportHeight();
+window.addEventListener('resize', setViewportHeight);
+window.addEventListener('orientationchange', setViewportHeight);
+window.visualViewport?.addEventListener('resize', setViewportHeight);
